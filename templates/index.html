@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Main page</title>
+  <link href="static/style.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+
+  <h1>Main page</h1>
+
+  <h2>Upload from file</h2>
+  <form action="upload" method="POST" enctype="multipart/form-data">
+    <input type="file" name="pointsfile" size="40">
+    <br><br>
+    <input type="submit" value="Upload">
+  </form>
+
+  <h2>Upload from paste</h2>
+  <form action="upload" method="POST" enctype="multipart/form-data">
+    <textarea name="pointstext" rows="15" cols="80"></textarea>
+    <br><br>
+    <input type="submit" value="Upload">
+  </form>
+  
+  <h2>Other</h2>
+  
+  <p>Go to upload page <a href="upload">with GET</a></p>
+
+</body>
+
+</html> 
