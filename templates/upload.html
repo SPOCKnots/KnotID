@@ -12,73 +12,85 @@
         <p><a href="/">Home</a></p>
 
         <h1>Upload</h1>
-
-        <p>Click and drag to move, scroll to zoom.<p>
-
-            <script src="static/trefoil_json.js"></script>
-            <script src="static/stats.min.js"></script>
-            <script src="static/three.min.js"></script>
-            <script src="static/OrbitControls.js"></script>
-            <script src="static/main.js"></script>
+        
+        <div>
             
-            {% if parse_success %}
-            <script>
-             var userCurve = {{ line_points }};
-             var userCurveVectors = userCurve.map( function ( val ) 
-                 { return new THREE.Vector3( val[0], val[1], val[2] ) } );
-             var userInterpolationCurve = new LinearInterpolationCurve( userCurveVectors );
-             var myTubeGeometry = new THREE.TubeGeometry( userInterpolationCurve, {{ tube_points }}, 1, 18, false );
-             var tubeMesh = new THREE.Mesh( myTubeGeometry, material );
-             scene.add( tubeMesh );
-             camera.position.z = {{ camera_extent }};
-            </script>
+            <div id="plot_container">
 
-            <p>Something was uploaded!</p>
-            
-            {% if num_lines %}
-            <p>Received {{ num_lines }} points.</p>
-            {% endif %}
-            
-            {% if gauss_code %}
-            <p>Gauss code:</p>
-            <div class="scroll" >
-                <p>{{ gauss_code }}</p>
+                <p id="instructions">Click and drag to move, scroll to zoom.</p>
+
+                <script src="static/trefoil_json.js"></script>
+                <script src="static/stats.min.js"></script>
+                <script src="static/three.min.js"></script>
+                <script src="static/OrbitControls.js"></script>
+                <script src="static/main.js"></script>
+                
+                {% if parse_success %}
+                <script>
+                 var userCurve = {{ line_points }};
+                 var userCurveVectors = userCurve.map( function ( val ) 
+                     { return new THREE.Vector3( val[0], val[1], val[2] ) } );
+                 var userInterpolationCurve = new LinearInterpolationCurve( userCurveVectors );
+                 var myTubeGeometry = new THREE.TubeGeometry( userInterpolationCurve, {{ tube_points }}, 1, 18, false );
+                 var tubeMesh = new THREE.Mesh( myTubeGeometry, material );
+                 scene.add( tubeMesh );
+                 camera.position.z = {{ camera_extent }};
+                </script>
+
             </div>
-            {% endif %}
             
-            {% if alex_roots %}
-            <p> Determinant is {{ alex_roots[0] }}. Alexander polynomial evaluated at second and third roots of unity is {{ alex_roots[1] }} and {{ alex_roots[2] }} respectively.</p>
-            {% endif %}
-            
-            {% if vassiliev_degree_2 %}
-            <p>Vassilev invariant of order 2 is {{ vassiliev_degree_2 }}.</p>
-            {% endif %}
-            
-            {% if identification %}
-            <p>First 3 Alexander roots match these prime knots:
-                {% for knot in identification %}<a href="http://katlas.org/wiki/{{ knot.identifier }}">{{ knot.identifier }}</a>{% if not loop.last %}, {% endif %}{% endfor %}.
-            </p>
-            {% else %}
-            <p>Could not identify any knots with the same Alexander roots 2, 3, 4.</p>
-            {% endif %}
-            
-            {% else %}
-            
-            <script src="static/helvetiker_regular.typeface.js"></script>
-            
-            <script>
-             var failureTextGeometry = new THREE.TextGeometry( 
-                 'Failed to parse text', { size: 1, height: 0.5 } )
-                 var failureTextMesh = new THREE.Mesh( failureTextGeometry, material );
-             failureTextMesh.position.x = -6;
-             scene.add( failureTextMesh );
-             camera.position.z = 10;
-            </script>
+            <div id="results_container">
 
-            <p>Failed to parse file.<p>
+                <p>Successfully uploaded the curve!</p>
+                
+                {% if num_lines %}
+                <p>Received {{ num_lines }} points.</p>
+                {% endif %}
+                
+                {% if gauss_code %}
+                <p>Gauss code:</p>
+                <div class="scroll" >
+                    <p>{{ gauss_code }}</p>
+                </div>
+                {% endif %}
+                
+                {% if alex_roots %}
+                <p>Determinant is {{ alex_roots[0] }}.</p>
+
+                <p>Alexander polynomial evaluated at second and third roots of unity is {{ alex_roots[1] }} and {{ alex_roots[2] }} respectively.</p>
+                {% endif %}
+                
+                {% if vassiliev_degree_2 %}
+                <p>Vassilev invariant of order 2 is {{ vassiliev_degree_2 }}.</p>
+                {% endif %}
+                
+                {% if identification %}
+                <p>First 3 Alexander roots and the number of counted crossings match these prime knots:
+                    {% for knot in identification %}<a href="http://katlas.org/wiki/{{ knot.identifier }}">{{ knot.identifier }}</a>{% if not loop.last %}, {% endif %}{% endfor %}.
+                </p>
+                {% else %}
+                <p>Could not identify any knots with the same Alexander roots 2, 3, 4.</p>
+                {% endif %}
+                
+                {% else %}
+                
+                <script src="static/helvetiker_regular.typeface.js"></script>
+                
+                <script>
+                 var failureTextGeometry = new THREE.TextGeometry( 
+                     'Failed to parse text', { size: 1, height: 0.5 } )
+                     var failureTextMesh = new THREE.Mesh( failureTextGeometry, material );
+                 failureTextMesh.position.x = -6;
+                 scene.add( failureTextMesh );
+                 camera.position.z = 10;
+                </script>
+
+                <p>Failed to parse file.</p>
 
                 <p>Check that the format is correct and <a href="/">try again</a>.</p>
                 {% endif %}
+            </div>
+        </div>
 
     </body>
 

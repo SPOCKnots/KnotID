@@ -4,9 +4,12 @@ var scene = new THREE.Scene();
 var camera = new THREE.PerspectiveCamera( 75, 1. , 0.1, 1000 );
 
 container = document.createElement( 'div' );
-document.body.appendChild( container );
+container.setAttribute('id', 'canvas_container');
+var plot_container = document.getElementById( 'plot_container' );
+// document.body.appendChild( container );
+plot_container.appendChild( container );
 
-var winSize = 0.8 * window.innerHeight;
+var winSize = 0.4 * window.innerWidth;
 console.log('winsize', winSize);
 
 
@@ -20,7 +23,7 @@ stats = new Stats();
 stats.domElement.style.position = 'absolute'
 stats.domElement.style.top = '0px';
 stats.domElement.style.right = '0px';
-container.appendChild( stats.domElement )
+document.body.appendChild( stats.domElement )
 
 var material = new THREE.MeshPhongMaterial( { color: 0xdddddd, specular: 0.5, ambient: 0xffffff, shading: THREE.SmoothShading } )
 
