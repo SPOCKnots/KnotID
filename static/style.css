@@ -15,3 +15,12 @@ canvas {
     border-color: black;
     border-radius: 25px;
 }
+
+div.scroll {
+    height: 50px;
+    width: 80%;
+    overflow: auto;
+    border: 1px solid #666;
+    background-color: #ccc;
+    padding: 8px;
+}

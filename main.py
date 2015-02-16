@@ -26,12 +26,13 @@ def upload():
         parse_success = False
 
         try:
-            array_json, camera_extent = text_to_json(text)
+            array_json, camera_extent, extra_stuff = text_to_json(text)
             parse_success = True
         except ValueError:
             print('Caught ValueError')
             array_json = []
             camera_extent = 5
+            extra_stuff = {}
 
         print('num_lines is', num_lines)
         print('lines is', lines)
@@ -42,7 +43,8 @@ def upload():
                                parse_success=parse_success,
                                line_points=array_json,
                                camera_extent=camera_extent,
-                               tube_points=tube_points)
+                               tube_points=tube_points,
+                               **extra_stuff)
 
     else:
         return render_template('upload_fail.html')

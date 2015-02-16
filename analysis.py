@@ -18,5 +18,12 @@ def text_to_json(text):
     k = Knot(points)
     k.zero_centroid()
     max_extent = n.max(n.max(n.abs(k.points), axis=0))
-    return json.dumps(k.points.tolist()), 2.5*max_extent
+    identification = k.identify()
+    
+    extra_stuff = {'identification': identification,
+                   'gauss_code': str(k.gauss_code()),
+                   'alex_roots': k.alexander_at_root((2, 3, 4)),
+                   'vassiliev_degree_2': k.vassiliev_degree_2()}
+    
+    return (json.dumps(k.points.tolist()), 2.5*max_extent, extra_stuff)
         
