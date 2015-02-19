@@ -6,7 +6,7 @@ body {
 
 h1 {
     text-align: center;
-    font-family: Calibri;
+    /* font-family: Calibri; */
 }
 
 canvas {
@@ -53,10 +53,13 @@ div.scroll {
     height: 35px;
     margin: 0 auto;
     text-align: center;
-    background-color: #eeeeff;
+    background-color: #ddddff;
     /* border-radius: 8px; */
     font-size: 16px;
     font-weight: bold;
+    border-top-style: solid;
+    border-bottom-style: solid;
+    border-width: 1px;
 }
 
 #menu ul {
@@ -70,7 +73,30 @@ div.scroll {
     padding: 20px;
 }
 
+#menu a {
+    text-decoration: none;
+    color: #0000bb;
+    padding: 8px;
+}
+
+#menu a:hover {
+    background-color: #eeeeff;
+}
+
+/* #menu a:after { */
+/*     content: ""; */
+/*     padding: 20px; */
+/*     /\* position: absolute; *\/ */
+/*     left: -10px; */
+/*     top: -10px; */
+/* } */
+
 #header_title a {
     color: black;
-    text_decoration: none;
+    text-decoration: none;
+}
+
+#centred_body {
+    width: 768px;
+    margin: 0 auto;
 }
