@@ -13,17 +13,17 @@
 
     <body>
         
-        <h1>
-            {% block header_title %}
-            Knot identifier
-            {% endblock %}
+        <h1 id="header_title">
+            <a href="/">Knot identifier</a>{% block header_title %}{% endblock %}
         </h1>
         
         {% block menu %}
-        <ul id="menu_list">
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About</a></li>
-        </ul>
+        <div id="menu">
+            <ul id="menu_list">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+            </ul>
+        </div>
         {% endblock %}
 
         {% block body %}
