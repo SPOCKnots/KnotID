@@ -34,9 +34,6 @@ def upload():
             camera_extent = 5
             extra_stuff = {}
 
-        print('num_lines is', num_lines)
-        print('lines is', lines)
-
         tube_points = 10*num_lines
 
         return render_template('upload.html', num_lines=num_lines,
