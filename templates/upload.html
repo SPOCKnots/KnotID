@@ -58,7 +58,7 @@ Upload - Knot identifier
         {% endif %}
         
         {% if alexander %}
-        <p>Full alexander polynomial is {{ alexander }}</p>
+        <p>Full alexander polynomial is \({{ alexander }}\)</p>
         {% else %}
         <p>Didn't calculate full Alexander polynomial. This is only enabled if there are fewer than 50 crossings in the projection.</p>
         {% endif %}
@@ -98,4 +98,8 @@ Upload - Knot identifier
         {% endif %}
     </div>
 </div>
+
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 {% endblock %}
