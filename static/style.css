@@ -46,3 +46,7 @@ div.scroll {
 #canvas_container {
     margin: 0 7.5%;
 }
+
+#menu_list {
+    display: inline;
+}
