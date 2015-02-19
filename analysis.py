@@ -29,7 +29,9 @@ def text_to_json(text):
     gc = k.gauss_code()
     if len(gc) < 100:
         extra_stuff['alexander'] = str(
-            k.alexander_polynomial(mode='cypari'))
+            k.alexander_polynomial(mode='cypari')).replace('*', '')
+
+        print(extra_stuff['alexander'])
     
     return (json.dumps(k.points.tolist()), 2.5*max_extent, extra_stuff)
         
