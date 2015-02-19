@@ -49,5 +49,10 @@ def upload():
     else:
         return render_template('upload_fail.html')
 
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
+    #app.run(debug=True)
