@@ -28,7 +28,7 @@ Upload - Knot identifier
          var userCurveVectors = userCurve.map( function ( val ) 
              { return new THREE.Vector3( val[0], val[1], val[2] ) } );
          var userInterpolationCurve = new LinearInterpolationCurve( userCurveVectors );
-         var myTubeGeometry = new THREE.TubeGeometry( userInterpolationCurve, {{ tube_points }}, 1, 18, false );
+         var myTubeGeometry = new THREE.TubeGeometry( userInterpolationCurve, {{ tube_points }}, 1, 18, true );
          var tubeMesh = new THREE.Mesh( myTubeGeometry, material );
          scene.add( tubeMesh );
          camera.position.z = {{ camera_extent }};
