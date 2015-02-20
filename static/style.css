@@ -106,10 +106,10 @@ div.disabled_notice {
     display: inline;
     color: #880000;
     background-color: #ffeeee;
-    padding: 5px 15px 5px 15px;
+    padding: 3px 7px 3px 7px;
     border-radius: 10px;
-    border: solid;
-    border-width: 1px;
+    /* border: solid; */
+    /* border-width: 1px; */
     border-color: #cc0000;
 }
 
@@ -118,10 +118,10 @@ div.enabled_notice {
     display: inline;
     color: #008800;
     background-color: #eeffee;
-    padding: 5px 15px 5px 15px;
+    padding: 3px 7px 3px 7px;
     border-radius: 10px;
-    border: solid;
-    border-width: 1px;
+    /* border: solid; */
+    /* border-width: 1px; */
     border-color: #00cc00;
 }
 
