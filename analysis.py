@@ -4,6 +4,7 @@ import json
 from pyknot2.spacecurves import Knot
 
 
+
 def text_to_json(text):
 
     points = []
@@ -16,6 +17,10 @@ def text_to_json(text):
         points.append([float(v) for v in values])
 
     k = Knot(points)
+    return knot_to_json(k)
+        
+
+def knot_to_json(knot):
     k.zero_centroid()
     max_extent = n.max(n.max(n.abs(k.points), axis=0))
     identification = k.identify()
@@ -34,4 +39,3 @@ def text_to_json(text):
         print(extra_stuff['alexander'])
     
     return (json.dumps(k.points.tolist()), 2.5*max_extent, extra_stuff)
-        
