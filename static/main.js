@@ -29,23 +29,29 @@ var material = new THREE.MeshPhongMaterial( { color: 0xdddddd, specular: 0.5, am
 
 scene.add( new THREE.AmbientLight( 0x333333 ) );
 
-var pointLight = new THREE.PointLight( 0xff0000, 1);
+var pointLight = new THREE.PointLight( 0xff0000, 0.7);
 pointLight.position.x = 40;
 pointLight.position.y = 40;
 pointLight.position.z = 0;
 scene.add(pointLight);
 
-var pointLight2 = new THREE.PointLight( 0x00ff00, 1);
+var pointLight2 = new THREE.PointLight( 0x00ff00, 0.7);
 pointLight2.position.x = -40; 
 pointLight2.position.y = 40;
 pointLight2.position.z = 0;
 scene.add(pointLight2);
 
-var pointLight2 = new THREE.PointLight( 0x0000ff, 1);
+var pointLight2 = new THREE.PointLight( 0x0000ff, 0.7);
 pointLight2.position.x = 0; 
 pointLight2.position.y = -40;
 pointLight2.position.z = -0;
 scene.add(pointLight2);
+
+var pointLight4 = new THREE.PointLight( 0xffffff, 0.5);
+pointLight4.position.x = 0; 
+pointLight4.position.y = 0;
+pointLight4.position.z = 0;
+scene.add(pointLight4);
 
 camera.near = 0;
 camera.far = 4;
