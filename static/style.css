@@ -100,3 +100,39 @@ div.scroll {
     width: 768px;
     margin: 0 auto;
 }
+
+div.disabled_notice {
+    margin-left: 10px;
+    display: inline;
+    color: #880000;
+    background-color: #ffeeee;
+    padding: 5px 15px 5px 15px;
+    border-radius: 10px;
+    border: solid;
+    border-width: 1px;
+    border-color: #cc0000;
+}
+
+div.enabled_notice {
+    margin-left: 10px;
+    display: inline;
+    color: #008800;
+    background-color: #eeffee;
+    padding: 5px 15px 5px 15px;
+    border-radius: 10px;
+    border: solid;
+    border-width: 1px;
+    border-color: #00cc00;
+}
+
+div.error_flash {
+    margin: 0 auto;
+    display: inline;
+    color: #ffffff;
+    background-color: #dd2222;
+    padding: 5px;
+    border-radius: 10px;
+    font-weight: bold;
+    border: solid;
+    border-color: #ff0000;
+}

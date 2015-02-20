@@ -15,6 +15,63 @@
     <input type="submit" value="Upload">
   </form>
   
+  <h2>Torus knots</h2>
+  
+  <p>Enter p and q for the knot. p is the number of times it winds
+  through the hole of the torus, and q the number of times it winds
+  around the edge. The knot will be approximated by a piecewise linear
+  curve with 300 segments, and so high p and q values may give
+  incorrect results.</p>
+      
+  <p>p and q must (for now) be coprime; this guarantees that the
+  result is a single-component knot.</p>
+  
+  <form action="upload" method="GET">
+      <input type="hidden" name="mode" value="torus">
+      p = <input type="text" name="p" oninput="checkGCD()" id="p_text" autocomplete="off" size="5">
+      <br>
+      q = <input type="text" name="q" oninput="checkGCD()" id="q_text" autocomplete="off" size="5">
+      <br><br>
+      <input type="submit" value="Upload" id="pq_button" disabled> <div id="pq_check" class="disabled_notice">p and q are not coprime</div>
+  </form>
+
+  <script>
+   function gcd(a,b) {
+       if (a < 0) a = -a;
+       if (b < 0) b = -b;
+       if (b > a) {var temp = a; a = b; b = temp;}
+       while (true) {
+           a %= b;
+           if (a == 0) return b;
+           b %= a;
+           if (b == 0) return a;
+       }
+   }
+
+   function checkGCD() {
+       var p = parseInt( document.getElementById( 'p_text' ).value );
+       var q = parseInt( document.getElementById( 'q_text' ).value );
+       
+       var correct_text = document.getElementById( 'pq_check' );
+       var button = document.getElementById( 'pq_button' );
+       
+       
+       if ( !isNaN( p ) && !isNaN( q ) && 
+           gcd( parseInt( p ), parseInt( q ) ) === 1 ) {
+               correct_text.className = 'enabled_notice';
+               correct_text.innerHTML = 'p and q are coprime';
+               button.disabled = false;
+       } else {
+           var correct_text = document.getElementById( 'pq_check' );
+           correct_text.className = 'disabled_notice';
+           correct_text.innerHTML = 'p and q are not coprime';
+           button.disabled = true;
+       }
+   }
+   
+   checkGCD()
+  </script>
+  
   <h2>Other</h2>
   
   <p>Go to upload page <a href="upload">with GET</a></p>
