@@ -84,10 +84,9 @@ def upload_post():
         array_json, camera_extent, extra_stuff = text_to_json(text)
         parse_success = True
     except ValueError:
-        print('Caught ValueError')
-        array_json = []
-        camera_extent = 5
-        extra_stuff = {}
+        flash('Could not parse uploaded knot points')
+        return upload_fail()
+
 
     tube_points = 10*num_lines
 
