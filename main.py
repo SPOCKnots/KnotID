@@ -22,10 +22,15 @@ def upload():
     elif request.method == 'GET':
         return upload_get()
 
-    return render_template('upload_fail.html')
+    flash('invalid upload request')
+    return upload_fail()
 
 def upload_get():
     args = request.args
+
+    if 'mode' not in args:
+        flash('No knot construction mode set (perhaps you entered the wrong URL)')
+        return upload_fail()
 
     if args['mode'] == 'torus':
         if 'p' not in args or 'q' not in args:
@@ -45,7 +50,7 @@ def upload_get():
 
         array_json, camera_extent, extra_stuff = torus_knot_to_json(p, q)
     else:
-        flash('invalid mode')
+        flash('invalid mode (should be \'torus\')')
         return upload_fail()
     tube_points = 600
 
