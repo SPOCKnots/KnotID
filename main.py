@@ -6,6 +6,8 @@ from fractions import gcd
 
 app = Flask(__name__)
 
+app.config["APPLICATION_ROOT"] = "/"
+
 with open('secret_key.bin', 'rb') as fileh:
     app.secret_key = fileh.read()
 
