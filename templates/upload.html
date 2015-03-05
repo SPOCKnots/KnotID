@@ -57,11 +57,14 @@ Upload - Knot identifier
         <p>Alexander polynomial evaluated at second and third roots of unity is {{ alex_roots[1] }} and {{ alex_roots[2] }} respectively.</p>
         {% endif %}
         
+        Didn't calculate the full Alexander polynomial as pari-gp isn't installed on this server yet.
+        {#
         {% if alexander %}
         <p>Full alexander polynomial is \({{ alexander }}\).</p>
         {% else %}
         <p>Didn't calculate full Alexander polynomial. This is only enabled if there are fewer than 50 crossings in the projection.</p>
         {% endif %}
+        #}
         
         {% if vassiliev_degree_2 %}
         <p>Vassilev invariant of order 2 is {{ vassiliev_degree_2 }}.</p>
