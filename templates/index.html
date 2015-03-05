@@ -128,8 +128,8 @@ Please try again:
   
   <h2>Other</h2>
   
-  <p>Go to upload page <a href="upload">with GET</a></p>
+  <p>Go to upload page <a href="{{ url_for('upload') }}">with GET</a></p>
   
-  <p><a href="/upload?mode=torus&p=3&q=3">Try to GET with invalid torus knot parameters</a></p>
+  <p><a href="{{ url_for('upload', mode='torus', p=3, q=3) }}">Try to GET with invalid torus knot parameters</a></p>
 
 {% endblock %}
