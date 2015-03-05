@@ -85,6 +85,9 @@ def upload_get():
             flash('p and q must currently both be less than 20')
             return upload_fail()
 
+        if p < 1 or q < 1:
+            flash('p and q must both be greater than 0')
+
         if gcd(p, q) != 1:
             flash('Chosen p and q are not coprime')
             return upload_fail()
@@ -145,4 +148,4 @@ def about():
 
 if __name__ == "__main__":
     #app.run()
-    app.run(debug=False)
+    app.run(debug=True)
