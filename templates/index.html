@@ -15,7 +15,7 @@ Please try again:
 {% endwith %}
 
   <h2>Upload from file</h2>
-  <form action="upload" method="POST" enctype="multipart/form-data">
+  <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
     <input type="file" name="pointsfile" size="40" onchange="checkFile()" id="file_selector">
     <br><br>
     <input type="submit" value="Upload" id="file_button"> <div id="file_check"></div>
@@ -42,7 +42,7 @@ Please try again:
   </script>
 
   <h2>Upload from paste</h2>
-  <form action="upload" method="POST" enctype="multipart/form-data">
+  <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
     <textarea name="pointstext" rows="3" cols="80" oninput="checkPaste()" id="paste_box"></textarea>
     <br><br>
     <input type="submit" value="Upload" id="paste_button"> <div id="paste_check"></div>
@@ -81,7 +81,7 @@ Please try again:
   <p>p and q must (for now) be coprime; this guarantees that the
   result is a single-component knot.</p>
   
-  <form action="upload" method="GET">
+  <form action="{{ url_for('upload') }}" method="GET">
       <input type="hidden" name="mode" value="torus">
       p = <input type="text" name="p" oninput="checkGCD()" id="p_text" autocomplete="off" size="5">
       <br>
