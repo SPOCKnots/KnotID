@@ -87,6 +87,7 @@ def upload_get():
 
         if p < 1 or q < 1:
             flash('p and q must both be greater than 0')
+            return upload_fail()
 
         if gcd(p, q) != 1:
             flash('Chosen p and q are not coprime')
