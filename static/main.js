@@ -15,6 +15,7 @@ console.log('winsize', winSize);
 
 //var renderer = new THREE.WebGLRenderer();
 var renderer = new THREE.WebGLRenderer( { antialias: true } );
+// var renderer = new THREE.CanvasRenderer( { antialias: true } );
 renderer.setSize( winSize, winSize );
 renderer.setClearColor( 0xeeeeee );
 container.appendChild( renderer.domElement );
