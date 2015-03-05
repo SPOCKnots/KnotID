@@ -25,10 +25,11 @@ def knot_to_json(k):
     k.rotate(n.array([0.001, 0.002, 0.0015]))
     k.zero_centroid()
     max_extent = n.max(n.max(n.abs(k.points), axis=0))
+    gc_string = str(k.gauss_code())
     identification = k.identify()
         
     extra_stuff = {'identification': identification,
-                   'gauss_code': str(k.gauss_code()),
+                   'gauss_code': gc_string,
                    'alex_roots': k.alexander_at_root((2, 3, 4)),
                    # 'hyp_vol': str(k.hyperbolic_volume()),
                    'vassiliev_degree_2': k.vassiliev_degree_2()}
