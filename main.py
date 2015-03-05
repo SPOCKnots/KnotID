@@ -79,6 +79,10 @@ def upload_get():
             flash('Could not convert p and q to integers')
             return upload_fail()
 
+        if p > 20 or q > 20:
+            flash('p and q must currently both be less than 20')
+            return upload_fail()
+
         if gcd(p, q) != 1:
             flash('Chosen p and q are not coprime')
             return upload_fail()
