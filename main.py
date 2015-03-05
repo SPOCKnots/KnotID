@@ -142,6 +142,10 @@ def upload_post():
                            tube_points=tube_points,
                            **extra_stuff)
 
+@app.errorhandler(413)
+def request_entity_too_large(error):
+    flash('Uploaded file is too large, max size is 200kb')
+    return upload_fail()
 
 @app.route('/about')
 def about():
