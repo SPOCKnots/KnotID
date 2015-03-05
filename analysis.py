@@ -22,6 +22,7 @@ def text_to_json(text):
         
 
 def knot_to_json(k):
+    k.rotate(n.array([0.001, 0.002, 0.0015]))
     k.zero_centroid()
     max_extent = n.max(n.max(n.abs(k.points), axis=0))
     identification = k.identify()
