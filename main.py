@@ -40,7 +40,7 @@ class ReverseProxied(object):
 app = Flask(__name__)
 app.wsgi_app = ReverseProxied(app.wsgi_app)
 
-app.config['MAX_CONTENT_LENGTH'] = 100 * 1024
+app.config['MAX_CONTENT_LENGTH'] = 300 * 1024
 
 with open('secret_key.bin', 'rb') as fileh:
     app.secret_key = fileh.read()
