@@ -22,6 +22,8 @@ two.update();
 
 var vertices = [];
 
+var touchedVertex = undefined;
+
 function getOffset(el) {
   el = el.getBoundingClientRect();
     return new Two.Vector(el.left + window.scrollX, el.top + window.scrollY);
@@ -33,7 +35,8 @@ LineVertex = function(pos, radius) {
     radius = radius || 10
     this.radius = radius;
     
-    console.log('pos radius', pos, radius);
+    this.previousVertex = undefined;
+    
     this.circle = two.makeCircle(pos.x, pos.y, radius);
     this.circle.fill = 'red';
     this.circle.stroke = 'darkred';
@@ -48,18 +51,44 @@ LineVertex = function(pos, radius) {
     }
 }
 
+LineVertex.prototype = {
+    constructor: LineVertex,
+    setPos: function(pos) {
+        console.log('setPos!');
+        this.pos = pos;
+        this.circle.translation.set(pos.x, pos.y);
+        this.line.translation.set(pos.x, pos.y);
+        this.line.vertices[0].x = 0;
+        this.line.vertices[0].y = 0;
+
+        if (typeof this.previousVertex !== 'undefined') {
+            var diff = new Two.Vector().sub(this.previousVertex.pos, this.pos);
+            this.line.vertices[1].x = diff.x;
+            this.line.vertices[1].y = diff.y;
+        }
+
+        two.update()
+    }
+}
+
 
 function handleTouch(e) {
     var mousePos = new Two.Vector(e.clientX, e.clientY);
     var elemPos = getOffset(elem);
     var relPos = new Two.Vector(mousePos.x - elemPos.x, mousePos.y - elemPos.y);
     
+    if (typeof touchedVertex !== 'undefined') {
+        touchedVertex.setPos( relPos );
+        return
+    }
+    
     for (var i=0; i<vertices.length; i++) {
         var vertex = vertices[i]
         distance = new Two.Vector().sub(relPos, vertex.pos).length()
         if (distance < vertex.radius) {
-            vertex.circle.fill = 'lightgreen';
-            two.update()
+            vertex.circle.fill = 'lime';
+            two.update();
+            touchedVertex = vertex;
             return
         }
     }
@@ -71,6 +100,9 @@ function addVertex(relPos) {
     var vertex = new LineVertex(relPos);
     
     vertices.push( vertex );
+    if (vertices.length > 1) {
+        vertices[vertices.length - 1].previousVertex = vertices[vertices.length - 2];
+    }
         
 
     two.update()
