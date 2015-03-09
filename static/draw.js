@@ -53,6 +53,16 @@ function handleTouch(e) {
     var mousePos = new Two.Vector(e.clientX, e.clientY);
     var elemPos = getOffset(elem);
     var relPos = new Two.Vector(mousePos.x - elemPos.x, mousePos.y - elemPos.y);
+    
+    for (var i=0; i<vertices.length; i++) {
+        var vertex = vertices[i]
+        distance = new Two.Vector().sub(relPos, vertex.pos).length()
+        if (distance < vertex.radius) {
+            vertex.circle.fill = 'lightgreen';
+            two.update()
+            return
+        }
+    }
 
     addVertex(relPos);
 }
