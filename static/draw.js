@@ -24,6 +24,13 @@ var vertices = [];
 
 var touchedVertex = undefined;
 
+function isUndefined(obj) {
+    if (typeof obj === 'undefined') {
+        return true
+    }
+    return false;
+}
+
 function getOffset(el) {
   el = el.getBoundingClientRect();
     return new Two.Vector(el.left + window.scrollX, el.top + window.scrollY);
@@ -36,6 +43,7 @@ LineVertex = function(pos, radius) {
     this.radius = radius;
     
     this.previousVertex = undefined;
+    this.nextVertex = undefined;
     
     this.circle = two.makeCircle(pos.x, pos.y, radius);
     this.circle.fill = 'red';
@@ -61,7 +69,7 @@ LineVertex.prototype = {
         this.line.vertices[0].x = 0;
         this.line.vertices[0].y = 0;
 
-        if (typeof this.previousVertex !== 'undefined') {
+        if (!isUndefined(this.previousVertex)) {
             var diff = new Two.Vector().sub(this.previousVertex.pos, this.pos);
             this.line.vertices[1].x = diff.x;
             this.line.vertices[1].y = diff.y;
@@ -71,13 +79,16 @@ LineVertex.prototype = {
     }
 }
 
-
-function handleTouch(e) {
+function getRelPos(e) {
     var mousePos = new Two.Vector(e.clientX, e.clientY);
     var elemPos = getOffset(elem);
     var relPos = new Two.Vector(mousePos.x - elemPos.x, mousePos.y - elemPos.y);
-    
-    if (typeof touchedVertex !== 'undefined') {
+    return relPos;
+}
+
+function handleTouch(e) {
+    var relPos = getRelPos(e);
+    if (!isUndefined(touchedVertex)) {
         touchedVertex.setPos( relPos );
         return
     }
@@ -89,11 +100,34 @@ function handleTouch(e) {
             vertex.circle.fill = 'lime';
             two.update();
             touchedVertex = vertex;
+            elem.addEventListener('mousemove', moveTouchedVertex);
             return
         }
     }
 
     addVertex(relPos);
+}
+
+function moveTouchedVertex(e) {
+    console.log('move!');
+    if (isUndefined(touchedVertex)) {
+        return
+    }
+    
+    var relPos = getRelPos(e);
+    
+    touchedVertex.setPos(relPos);
+}
+
+function handleTouchUp(e) {
+    if (isUndefined(touchedVertex)) {
+        return
+    }
+
+    touchedVertex.circle.fill = 'red';
+    two.update();
+    touchedVertex = undefined;
+    elem.removeEventListener('mousemove', moveTouched);
 }
 
 function addVertex(relPos) {
@@ -102,6 +136,7 @@ function addVertex(relPos) {
     vertices.push( vertex );
     if (vertices.length > 1) {
         vertices[vertices.length - 1].previousVertex = vertices[vertices.length - 2];
+        vertices[vertices.length - 2].nextVertex = vertices[vertices.length - 1];
     }
         
 
@@ -109,3 +144,4 @@ function addVertex(relPos) {
 };
 
 elem.addEventListener('mousedown', handleTouch);
+elem.addEventListener('mouseup', handleTouchUp);
