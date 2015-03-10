@@ -50,32 +50,41 @@ LineVertex = function(pos, radius) {
     this.circle.stroke = 'darkred';
     this.circle.linewidth = 3;
     
-    if (vertices.length > 0) {
-        var vertex = vertices[vertices.length - 1];
-        this.line = two.makePolygon(pos.x, pos.y, vertex.pos.x, vertex.pos.y, true);
-        this.line.noFill();
-        this.line.stroke = 'blue';
-        this.line.linewidth = 3;
-    }
+    this.line = two.makePolygon(pos.x, pos.y, pos.x, pos.y, true);
+    this.line.noFill();
+    this.line.stroke = 'blue';
+    this.line.linewidth = 3;
+    this.line.translation.set(this.pos.x, this.pos.y);
 }
 
 LineVertex.prototype = {
     constructor: LineVertex,
     setPos: function(pos) {
-        console.log('setPos!');
         this.pos = pos;
         this.circle.translation.set(pos.x, pos.y);
         this.line.translation.set(pos.x, pos.y);
+        
+        var diff = new Two.Vector().sub(this.line.vertices[1], this.line.vertices[0]);
         this.line.vertices[0].x = 0;
         this.line.vertices[0].y = 0;
+        this.line.vertices[1].x = diff.x;
+        this.line.vertices[1].y = diff.y;
 
+        this.positionLine();
+        
+        if (!isUndefined(this.nextVertex)) {
+            this.nextVertex.positionLine();
+        }
+
+        two.update()
+    },
+    
+    positionLine: function() {
         if (!isUndefined(this.previousVertex)) {
             var diff = new Two.Vector().sub(this.previousVertex.pos, this.pos);
             this.line.vertices[1].x = diff.x;
             this.line.vertices[1].y = diff.y;
         }
-
-        two.update()
     }
 }
 
@@ -109,7 +118,6 @@ function handleTouch(e) {
 }
 
 function moveTouchedVertex(e) {
-    console.log('move!');
     if (isUndefined(touchedVertex)) {
         return
     }
@@ -127,7 +135,7 @@ function handleTouchUp(e) {
     touchedVertex.circle.fill = 'red';
     two.update();
     touchedVertex = undefined;
-    elem.removeEventListener('mousemove', moveTouched);
+    elem.removeEventListener('mousemove', moveTouchedVertex);
 }
 
 function addVertex(relPos) {
@@ -138,7 +146,8 @@ function addVertex(relPos) {
         vertices[vertices.length - 1].previousVertex = vertices[vertices.length - 2];
         vertices[vertices.length - 2].nextVertex = vertices[vertices.length - 1];
     }
-        
+
+    vertices[vertices.length - 1].positionLine();
 
     two.update()
 };
