@@ -15,7 +15,6 @@ line.stroke = 'red';
    /* group.translation.set(two.width / 2, two.height / 2); */
 /* group.noStroke(); */
 
-console.log(rect._renderer.elem);
 
 two.update();
 
@@ -36,10 +35,21 @@ function getOffset(el) {
     return new Two.Vector(el.left + window.scrollX, el.top + window.scrollY);
 }
 
+Crossing = function(pos, radius) {
+    radius = radius || 10;
+    
+    this.pos = pos;
+    this.radius = radius;
+    
+    this.circle = two.makeCircle(pos.x, pos.y, radius);
+    this.circle.fill = 'orange';
+    this.circle.stroke = 'magenta';
+    this.circle.linewidth = 1;
+}
 
 LineVertex = function(pos, radius) {
     this.pos = pos; 
-    radius = radius || 10
+    radius = radius || 10;
     this.radius = radius;
     
     this.previousVertex = undefined;
@@ -49,7 +59,6 @@ LineVertex = function(pos, radius) {
     this.circle.fill = 'red';
     this.circle.stroke = 'darkred';
     this.circle.linewidth = 3;
-    console.log(this.circle.translation, this.circle.radius);
     
     this.line = two.makePolygon(pos.x, pos.y, pos.x, pos.y, true);
     this.line.noFill();
@@ -153,9 +162,53 @@ function addVertex(relPos) {
     }
 
     vertices[vertices.length - 1].positionLine();
+    
+    checkForNewCrossings();
 
     two.update()
 };
+
+function checkForNewCrossings() {
+    if (vertices.length < 2) {
+        return
+    }
+    var v1 = vertices[vertices.length - 2].pos;
+    var v2 = vertices[vertices.length - 1].pos;
+    var dv = new Two.Vector().sub(v2, v1);
+    for (var i=0; i < vertices.length - 3; i++) {
+        var ov1 = vertices[i].pos;
+        var ov2 = vertices[i+1].pos;
+        var odv = new Two.Vector().sub(ov2, ov1);
+        var intersect = checkIntersection(v1, dv, ov1, odv);
+        console.log('intersect is', intersect);
+        if (intersect[0]) {
+            var crossingPos = dv.clone().multiplyScalar(intersect[1]).addSelf(v1);
+            var newCrossing = Crossing(crossingPos, 10);
+        }
+    }
+}
+
+function checkIntersection(p, dp, q, dq) {
+    var crossDiffs = crossProduct(dp.x, dp.y, dq.x, dq.y);
+    if (Math.abs(crossDiffs) < 0.000001) {
+        return [false, 0., 0.];
+    }
+
+    var t = crossProduct(q.x - p.x, q.y - p.y, dq.x, dq.y) / crossDiffs;
+    
+    if (t < 1.0 && t > 0.0) {
+        u = crossProduct(q.x - p.x, q.y - p.y, dp.x, dp.y) / crossDiffs;
+        if (u < 1.0 && u > 0.0) {
+            console.log('found intersection between', p.x, p.y, dp.x, dp.y, q.x, q.y, dq.x, dq.y)
+            return [true, t, u];
+        }
+    }
+    return [false, -1, -1];
+}
+
+function crossProduct(px, py, qx, qy) {
+    return px * qy - py * qx;
+}
 
 elem.addEventListener('mousedown', handleTouchDown);
 elem.addEventListener('mouseup', handleTouchUp);
