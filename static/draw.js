@@ -49,19 +49,24 @@ LineVertex = function(pos, radius) {
     this.circle.fill = 'red';
     this.circle.stroke = 'darkred';
     this.circle.linewidth = 3;
+    console.log(this.circle.translation, this.circle.radius);
     
     this.line = two.makePolygon(pos.x, pos.y, pos.x, pos.y, true);
     this.line.noFill();
     this.line.stroke = 'blue';
     this.line.linewidth = 3;
-    this.line.translation.set(this.pos.x, this.pos.y);
+    
+    this.setPos(this.pos);
 }
 
 LineVertex.prototype = {
     constructor: LineVertex,
     setPos: function(pos) {
         this.pos = pos;
-        this.circle.translation.set(pos.x, pos.y);
+        // this.circle.translation.set(pos.x - 0.5*this.radius, 
+        //                             pos.y - 0.5*this.radius);
+        this.circle.translation.set(pos.x,
+                                    pos.y)
         this.line.translation.set(pos.x, pos.y);
         
         var diff = new Two.Vector().sub(this.line.vertices[1], this.line.vertices[0]);
@@ -91,11 +96,11 @@ LineVertex.prototype = {
 function getRelPos(e) {
     var mousePos = new Two.Vector(e.clientX, e.clientY);
     var elemPos = getOffset(elem);
-    var relPos = new Two.Vector(mousePos.x - elemPos.x, mousePos.y - elemPos.y);
+    var relPos = new Two.Vector(mousePos.x - elemPos.x - 5, mousePos.y - elemPos.y - 5);
     return relPos;
 }
 
-function handleTouch(e) {
+function handleTouchDown(e) {
     var relPos = getRelPos(e);
     if (!isUndefined(touchedVertex)) {
         touchedVertex.setPos( relPos );
@@ -139,7 +144,7 @@ function handleTouchUp(e) {
 }
 
 function addVertex(relPos) {
-    var vertex = new LineVertex(relPos);
+    var vertex = new LineVertex(relPos, 10);
     
     vertices.push( vertex );
     if (vertices.length > 1) {
@@ -152,5 +157,5 @@ function addVertex(relPos) {
     two.update()
 };
 
-elem.addEventListener('mousedown', handleTouch);
+elem.addEventListener('mousedown', handleTouchDown);
 elem.addEventListener('mouseup', handleTouchUp);
