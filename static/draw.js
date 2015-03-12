@@ -20,6 +20,7 @@ two.update();
 
 
 var vertices = [];
+var crossings = [];
 
 var touchedVertex = undefined;
 
@@ -35,17 +36,47 @@ function getOffset(el) {
     return new Two.Vector(el.left + window.scrollX, el.top + window.scrollY);
 }
 
-Crossing = function(pos, radius) {
-    radius = radius || 10;
+Crossing = function(pos, angle1, angle2, radius) {
+    var radius = radius || 10;
     
     this.pos = pos;
+    this.angle1 = angle1;
+    this.angle2 = angle2;
     this.radius = radius;
+    this.type = 'over';
     
     this.circle = two.makeCircle(pos.x, pos.y, radius);
-    this.circle.fill = 'orange';
-    this.circle.stroke = 'magenta';
-    this.circle.linewidth = 1;
+    this.circle.fill = '#eee';
+    this.circle.linewidth = 0;
+    
+    var drx = Math.cos(angle1) * this.radius
+    var dry = Math.sin(angle1) * this.radius
+    this.line = two.makePolygon(pos.x + drx, pos.y + dry, pos.x - drx, pos.y - dry, true);
+    this.line.noFill();
+    this.line.stroke = 'blue';
+    this.line.linewidth = 3;
 }
+
+Crossing.prototype = {
+    constructor: Crossing,
+    flip: function(pos) {
+        this.type = (this.type === 'over') ? 'under' : 'over';
+        this.alignLine();
+    },
+    
+    alignLine: function(pos) {
+        var angle = (this.type === 'over') ? this.angle1 : this.angle2
+        var drx = Math.cos(angle) * this.radius
+        var dry = Math.sin(angle) * this.radius
+        console.log('asked to align', angle, drx, dry);
+        this.line.vertices[0].x = drx
+        this.line.vertices[0].y = dry
+        this.line.vertices[1].x = -1 * drx
+        this.line.vertices[1].y = -1 * dry
+    }
+}
+
+
 
 LineVertex = function(pos, radius) {
     this.pos = pos; 
@@ -111,12 +142,25 @@ function getRelPos(e) {
 
 function handleTouchDown(e) {
     var relPos = getRelPos(e);
+
     if (!isUndefined(touchedVertex)) {
         touchedVertex.setPos( relPos );
         return
     }
     
-    for (var i=0; i<vertices.length; i++) {
+    console.log('checking crossings', crossings);
+    for (var i=0; i < crossings.length; i++) {
+        var crossing = crossings[i];
+        console.log('crossing is', crossing);
+        distance = new Two.Vector().sub(relPos, crossing.pos).length()
+        if (distance < crossing.radius) {
+            crossing.flip();
+            two.update();
+            return
+        }
+    }
+    
+    for (var i=0; i < vertices.length; i++) {
         var vertex = vertices[i]
         distance = new Two.Vector().sub(relPos, vertex.pos).length()
         if (distance < vertex.radius) {
@@ -183,7 +227,10 @@ function checkForNewCrossings() {
         console.log('intersect is', intersect);
         if (intersect[0]) {
             var crossingPos = dv.clone().multiplyScalar(intersect[1]).addSelf(v1);
-            var newCrossing = Crossing(crossingPos, 10);
+            var angle1 = Math.atan2(dv.y, dv.x);
+            var angle2 = Math.atan2(odv.y, odv.x);
+            var newCrossing = new Crossing(crossingPos, angle1, angle2, 10);
+            crossings.push(newCrossing);
         }
     }
 }
