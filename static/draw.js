@@ -1,21 +1,6 @@
 var elem = document.getElementById('draw-shapes');
 var two = new Two({ width: window.innerWidth - 40, height: window.innerHeight - 200}).appendTo(elem);
 
-var circle = two.makeCircle(100, 100, 50);
-var rect = two.makeRectangle(100, 200, 100, 100);
-circle.fill = '#FF8000';
-rect.fill = 'rgba(0, 200, 255, 0.75)';
-
-var line = two.makePolygon(30, 30, 100, 100, 200, 500, 300, 200, true);
-line.fill = 'rgba(0, 0, 0, 0)';
-line.linewidth = 6;
-line.stroke = 'red';
-
-/* var group = two.makeGroup(circle, rect);
-   /* group.translation.set(two.width / 2, two.height / 2); */
-/* group.noStroke(); */
-
-
 two.update();
 
 
