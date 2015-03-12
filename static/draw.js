@@ -1,5 +1,5 @@
 var elem = document.getElementById('draw-shapes');
-var two = new Two({ width: window.innerWidth - 40, height: window.innerHeight - 200}).appendTo(elem);
+var two = new Two({ width: window.innerWidth - 40, height: window.innerHeight - 250}).appendTo(elem);
 
 two.update();
 
@@ -196,7 +196,9 @@ function addVertex(relPos) {
     
     checkForNewCrossings();
 
-    two.update()
+    two.update();
+    
+    getGaussCode();
 };
 
 function checkForNewCrossings() {
@@ -263,9 +265,13 @@ function getGaussCode() {
     
     var gcString = gcElements.join(',');
     // var gcString = ''.concat.apply(gcElements);
-
+    
+    if (gcString.length == 0) {
+        gcString = '----';
+    }
+    
     var gcElem = document.getElementById('gc_output');
-    gcElem.innerHTML = gcString;
+    gcElem.innerHTML = 'Gauss code: <strong>'.concat(gcString, '</strong>');
 }
 
 elem.addEventListener('mousedown', handleTouchDown);
