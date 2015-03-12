@@ -21,12 +21,15 @@ function getOffset(el) {
     return new Two.Vector(el.left + window.scrollX, el.top + window.scrollY);
 }
 
-Crossing = function(pos, angle1, angle2, radius) {
+Crossing = function(pos, angle1, angle2, index1, index2, clockwise, radius) {
     var radius = radius || 10;
     
     this.pos = pos;
     this.angle1 = angle1;
     this.angle2 = angle2;
+    this.index1 = index1;
+    this.index2 = index2;
+    this.clockwise = clockwise;
     this.radius = radius;
     this.type = 'over';
     
@@ -46,14 +49,15 @@ Crossing.prototype = {
     constructor: Crossing,
     flip: function(pos) {
         this.type = (this.type === 'over') ? 'under' : 'over';
+        this.clockwise = (this.clockwise === true) ? false : true;
         this.alignLine();
+        getGaussCode();
     },
     
     alignLine: function(pos) {
         var angle = (this.type === 'over') ? this.angle1 : this.angle2
         var drx = Math.cos(angle) * this.radius
         var dry = Math.sin(angle) * this.radius
-        console.log('asked to align', angle, drx, dry);
         this.line.vertices[0].x = drx
         this.line.vertices[0].y = dry
         this.line.vertices[1].x = -1 * drx
@@ -133,10 +137,8 @@ function handleTouchDown(e) {
         return
     }
     
-    console.log('checking crossings', crossings);
     for (var i=0; i < crossings.length; i++) {
         var crossing = crossings[i];
-        console.log('crossing is', crossing);
         distance = new Two.Vector().sub(relPos, crossing.pos).length()
         if (distance < crossing.radius) {
             crossing.flip();
@@ -209,12 +211,14 @@ function checkForNewCrossings() {
         var ov2 = vertices[i+1].pos;
         var odv = new Two.Vector().sub(ov2, ov1);
         var intersect = checkIntersection(v1, dv, ov1, odv);
-        console.log('intersect is', intersect);
         if (intersect[0]) {
             var crossingPos = dv.clone().multiplyScalar(intersect[1]).addSelf(v1);
             var angle1 = Math.atan2(dv.y, dv.x);
             var angle2 = Math.atan2(odv.y, odv.x);
-            var newCrossing = new Crossing(crossingPos, angle1, angle2, 10);
+            var index1 = i + intersect[2];
+            var index2 = vertices.length - 1 + intersect[1];
+            var clockwise = (crossProduct(dv.x, dv.y, odv.x, odv.y) > 0) ? false : true;
+            var newCrossing = new Crossing(crossingPos, angle1, angle2, index1, index2, clockwise, 10);
             crossings.push(newCrossing);
         }
     }
@@ -231,7 +235,6 @@ function checkIntersection(p, dp, q, dq) {
     if (t < 1.0 && t > 0.0) {
         u = crossProduct(q.x - p.x, q.y - p.y, dp.x, dp.y) / crossDiffs;
         if (u < 1.0 && u > 0.0) {
-            console.log('found intersection between', p.x, p.y, dp.x, dp.y, q.x, q.y, dq.x, dq.y)
             return [true, t, u];
         }
     }
@@ -240,6 +243,29 @@ function checkIntersection(p, dp, q, dq) {
 
 function crossProduct(px, py, qx, qy) {
     return px * qy - py * qx;
+}
+
+function getGaussCode() {
+    var index = 1;
+    var gc = [];
+    for (var i=0; i < crossings.length; i++) {
+        var crossing = crossings[i];
+        gc.push([crossing.index1, index, (crossing.type === 'over') ? '-' : '+', (crossing.clockwise) ? 'c' : 'a'])
+        gc.push([crossing.index2, index, (crossing.type === 'over') ? '+' : '-', (crossing.clockwise) ? 'c' : 'a'])
+        index++;
+    }
+    gc.sort(function (a, b) {
+        return a[0] - b[0];
+    })
+    var gcElements = gc.map(function (e) {
+        return e[1].toString().concat(e[2].toString(), e[3])
+    })
+    
+    var gcString = gcElements.join(',');
+    // var gcString = ''.concat.apply(gcElements);
+
+    var gcElem = document.getElementById('gc_output');
+    gcElem.innerHTML = gcString;
 }
 
 elem.addEventListener('mousedown', handleTouchDown);
