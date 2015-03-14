@@ -218,7 +218,7 @@ function checkForNewCrossings() {
             var angle1 = Math.atan2(dv.y, dv.x);
             var angle2 = Math.atan2(odv.y, odv.x);
             var index1 = i + intersect[2];
-            var index2 = vertices.length - 1 + intersect[1];
+            var index2 = vertices.length - 2 + intersect[1];
             var clockwise = (crossProduct(dv.x, dv.y, odv.x, odv.y) > 0) ? false : true;
             var newCrossing = new Crossing(crossingPos, angle1, angle2, index1, index2, clockwise, 10);
             crossings.push(newCrossing);
