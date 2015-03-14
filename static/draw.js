@@ -195,6 +195,10 @@ function addVertex(relPos) {
     vertices[vertices.length - 1].positionLine();
     
     checkForNewCrossings();
+    
+    touchedVertex = vertex;
+    vertex.circle.fill = 'lime';
+    elem.addEventListener('mousemove', moveTouchedVertex);
 
     two.update();
     
