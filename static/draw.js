@@ -7,7 +7,7 @@ two.update();
 var vertices = [];
 var crossings = [];
 var include_closure = false;
-var translucent_crossigns = false;
+var translucency = false;
 
 var touchedVertex = undefined;
 
@@ -38,6 +38,7 @@ Crossing = function(pos, angle1, angle2, index1, index2, clockwise, radius) {
     this.circle = two.makeCircle(pos.x, pos.y, radius);
     this.circle.fill = '#eee';
     this.circle.linewidth = 0;
+    this.setTranslucency(translucency);
     
     var drx = Math.cos(angle1) * this.radius
     var dry = Math.sin(angle1) * this.radius
@@ -71,10 +72,18 @@ Crossing.prototype = {
         this.line.translation.set(pos.x, pos.y);
         two.update()
     },
+    setTranslucency: function(translucent) {
+        if (translucent) {
+            this.circle.opacity = 0.7;
+        } else {
+            this.circle.opacity = 1.0;
+        }
+    },
     undraw: function() {
         two.remove(this.circle);
         two.remove(this.line);
     }
+  
 }
 
 function recheckCrossings(index) {
@@ -452,6 +461,16 @@ function getGaussCode() {
     gcElem.innerHTML = 'Gauss code: <strong>'.concat(gcString, '</strong>');
 }
 
+function changeTranslucency() {
+    var translucencyCheckBox = document.getElementById('translucency_checkbox');
+    translucency = translucencyCheckBox.checked;
+    
+    for (var i=0; i < crossings.length; i++) {
+        crossings[i].setTranslucency(translucency);
+    }
+    two.update();
+}
+
 function changeClosure() {
     var closureCheckBox = document.getElementById('closure_checkbox');
     include_closure = closureCheckBox.checked;
@@ -477,5 +496,6 @@ function changeClosure() {
 
 elem.addEventListener('mousedown', handleTouchDown);
 elem.addEventListener('mouseup', handleTouchUp);
-changeClosure()
+changeClosure();
+changeTranslucency();
 
