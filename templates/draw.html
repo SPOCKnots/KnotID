@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block header_title %}
+: Draw
+{% endblock %}
+
+{% block title %}
+Draw - Knot identifier
+{% endblock %}
+
+{% block body %}
+<script src="static/two.js"></script>
+<p>
+  Click to draw
+</p>
+
+    <div id="draw_page">
+    
+    <div id="draw-shapes" ondragstart="return false;" ondrop="return false;">
+    </div>
+
+    <script src="static/draw.js"></script>
+    </div>
+
+<p id="gc_output">
+  Gauss code: <strong>----</strong>
+</p>
+    
+    
+
+{% endblock %}
