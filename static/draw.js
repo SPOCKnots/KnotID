@@ -24,6 +24,7 @@ function getOffset(el) {
 Crossing = function(pos, angle1, angle2, index1, index2, clockwise, radius) {
     var radius = radius || 10;
     
+    console.log('Making crossing!')
     this.pos = pos;
     this.angle1 = angle1;
     this.angle2 = angle2;
@@ -62,9 +63,55 @@ Crossing.prototype = {
         this.line.vertices[0].y = dry
         this.line.vertices[1].x = -1 * drx
         this.line.vertices[1].y = -1 * dry
+    },
+    setPos: function(pos) {
+        this.pos = pos;
+        this.circle.translation.set(pos.x, pos.y);
+        this.line.translation.set(pos.x, pos.y);
+        two.update()
+    },
+    undraw: function() {
+        two.remove(this.circle);
+        two.remove(this.line);
     }
 }
 
+function recheckCrossings(index1, index2) {
+    console.log('===')
+    console.log('initial crossing num', crossings.length)
+    var crossings1 = extractCrossingsWithIndex(index1);
+    var newCrossings1 = findCrossings(index1, crossings1);
+    console.log('after remove1', crossings.length, newCrossings1.length)
+    crossings = crossings.concat(newCrossings1);
+    
+    if (crossings.length > 2) {
+        console.log('same?', crossings[-1] === crossings[-2])
+    }
+
+    if (index2 >= vertices.length - 1) {
+        return;
+    }
+    var crossings2 = extractCrossingsWithIndex(index2);
+    var newCrossings2 = findCrossings(index2, crossings2);
+    console.log('after remove2', crossings.length, newCrossings2.length)
+    crossings = crossings.concat(newCrossings2);
+}
+
+function extractCrossingsWithIndex(index) {
+    console.log('--- start extract', crossings.length)
+    var extractedCrossings = [];
+    for (var i = crossings.length-1; i >= 0; i--) {
+        var crossing = crossings[i];
+        if ((crossing.index1 > index && crossing.index1 < (index+1)) ||
+            (crossing.index2 > index && crossing.index2 < (index+1))) {
+            extractedCrossings.push(crossing);
+            crossings.splice(i, 1);
+        }
+    }
+    extractedCrossings.reverse();
+    console.log('--- end extract', crossings.length, extractedCrossings.length)
+    return extractedCrossings;
+}
 
 
 LineVertex = function(pos, radius) {
@@ -137,16 +184,6 @@ function handleTouchDown(e) {
         return
     }
     
-    for (var i=0; i < crossings.length; i++) {
-        var crossing = crossings[i];
-        distance = new Two.Vector().sub(relPos, crossing.pos).length()
-        if (distance < crossing.radius) {
-            crossing.flip();
-            two.update();
-            return
-        }
-    }
-    
     for (var i=0; i < vertices.length; i++) {
         var vertex = vertices[i]
         distance = new Two.Vector().sub(relPos, vertex.pos).length()
@@ -159,6 +196,17 @@ function handleTouchDown(e) {
         }
     }
 
+    for (var i=0; i < crossings.length; i++) {
+        var crossing = crossings[i];
+        distance = new Two.Vector().sub(relPos, crossing.pos).length()
+        if (distance < crossing.radius) {
+            crossing.flip();
+            two.update();
+            return
+        }
+    }
+    
+
     addVertex(relPos);
 }
 
@@ -170,6 +218,18 @@ function moveTouchedVertex(e) {
     var relPos = getRelPos(e);
     
     touchedVertex.setPos(relPos);
+    
+    var vs = getSortedVertices();
+    var index = 0;
+    for (var i=0; i < vs.length; i++) {
+        if (vs[i] === touchedVertex) {
+            index = i;
+            break;
+        }
+    }
+    recheckCrossings(index-1, index);
+
+    console.log('cs', crossings.toString());
 }
 
 function handleTouchUp(e) {
@@ -204,6 +264,82 @@ function addVertex(relPos) {
     
     getGaussCode();
 };
+
+function findCrossings(lineIndex, crossingCache) {
+    
+    var v1 = vertices[lineIndex].pos;
+    var v2 = vertices[lineIndex + 1].pos;
+    var dv = new Two.Vector().sub(v2, v1);
+    
+    var newCrossings = [];
+    
+    console.log('lineIndex is', lineIndex);
+    for (var i=0; i < lineIndex - 1; i++) {
+        var ov1 = vertices[i].pos;
+        var ov2 = vertices[i+1].pos;
+        var odv = new Two.Vector().sub(ov2, ov1);
+        var intersect = checkIntersection(v1, dv, ov1, odv);
+        if (intersect[0]) {
+            var crossingPos = dv.clone().multiplyScalar(intersect[1]).addSelf(v1);
+            var angle1 = Math.atan2(dv.y, dv.x);
+            var angle2 = Math.atan2(odv.y, odv.x);
+            var index1 = i + intersect[2];
+            var index2 = vertices.length - 2 + intersect[1];
+            var clockwise = (crossProduct(dv.x, dv.y, odv.x, odv.y) > 0) ? false : true;
+            var newCrossing = crossingFromCache(crossingCache);
+            newCrossing.angle1 = angle1;
+            newCrossing.angle2 = angle2;
+            newCrossing.index1 = index1;
+            newCrossing.index2 = index2;
+            if (newCrossing.type == 'under') {
+                clockwise = !clockwise;
+            }
+            newCrossing.clockwise = clockwise;
+            newCrossing.setPos(crossingPos);
+            newCrossing.alignLine();
+            newCrossings.push(newCrossing)
+        }
+    }
+
+    for (var i=(lineIndex + 2); i < (vertices.length-1); i++) {
+        var ov1 = vertices[i].pos;
+        var ov2 = vertices[i+1].pos;
+        var odv = new Two.Vector().sub(ov2, ov1);
+        var intersect = checkIntersection(v1, dv, ov1, odv);
+        if (intersect[0]) {
+            var crossingPos = dv.clone().multiplyScalar(intersect[1]).addSelf(v1);
+            var angle2 = Math.atan2(dv.y, dv.x);
+            var angle1 = Math.atan2(odv.y, odv.x);
+            var index2 = i + intersect[2];
+            var index1 = vertices.length - 2 + intersect[1];
+            var clockwise = (crossProduct(odv.x, odv.y, dv.x, dv.y) > 0) ? false : true;
+            var newCrossing = crossingFromCache(crossingCache);
+            newCrossing.angle1 = angle1;
+            newCrossing.angle2 = angle2;
+            newCrossing.index1 = index1;
+            newCrossing.index2 = index2;
+            if (newCrossing.type == 'under') {
+                clockwise = !clockwise;
+            }
+            newCrossing.clockwise = clockwise;
+            newCrossing.setPos(crossingPos);
+            newCrossing.alignLine();
+            newCrossings.push(newCrossing);
+        }
+    }
+
+    for (var i=0; i < crossingCache.length; i++) {
+        crossingCache[i].undraw();
+    }
+    return newCrossings;
+}
+
+function crossingFromCache(cache) {
+    if (cache.length > 0) {
+        return cache.shift();
+    }
+    return new Crossing(new Two.Vector(0, 0), 0, 0, 0, 0, true, 10);
+}
 
 function checkForNewCrossings() {
     if (vertices.length < 2) {
@@ -249,6 +385,14 @@ function checkIntersection(p, dp, q, dq) {
 
 function crossProduct(px, py, qx, qy) {
     return px * qy - py * qx;
+}
+
+function getSortedVertices() {
+    var vs = vertices.slice(0);
+    vs.sort(function (a, b) {
+        return a.index1 - b.index1;
+    })
+    return vs;
 }
 
 function getGaussCode() {
