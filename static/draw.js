@@ -460,6 +460,7 @@ function changeClosure() {
     }
     if (include_closure) {
         vertices[0].previousVertex = vertices[vertices.length - 1];
+        vertices[vertices.length - 1].nextVertex = vertices[0];
     } else {
         vertices[0].previousVertex = undefined;
         closureCrossings = extractCrossingsWithIndex(vertices.length - 1);
