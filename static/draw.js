@@ -6,6 +6,8 @@ two.update();
 
 var vertices = [];
 var crossings = [];
+var include_closure = false;
+var translucent_crossigns = false;
 
 var touchedVertex = undefined;
 
@@ -18,7 +20,7 @@ function isUndefined(obj) {
 
 function getOffset(el) {
   el = el.getBoundingClientRect();
-    return new Two.Vector(el.left + window.scrollX, el.top + window.scrollY);
+    return new Two.Vector(el.left, el.top);
 }
 
 Crossing = function(pos, angle1, angle2, index1, index2, clockwise, radius) {
@@ -79,6 +81,19 @@ function recheckCrossings(index) {
     var crossings1 = extractCrossingsWithIndex(index);
     var newCrossings1 = findCrossings(index, crossings1);
     crossings = crossings.concat(newCrossings1);
+}
+
+function recheckAllCrossings() {
+    if (vertices.length < 3) {
+        return
+    }
+    for (var i=0; i < (vertices.length - 1); i++) {
+        recheckCrossings(i);
+    }
+
+    if (include_closure) {
+        recheckCrossings(vertices.length - 1);
+    } 
 }
 
 function extractCrossingsWithIndex(index) {
@@ -148,6 +163,9 @@ LineVertex.prototype = {
             var diff = new Two.Vector().sub(this.previousVertex.pos, this.pos);
             this.line.vertices[1].x = diff.x;
             this.line.vertices[1].y = diff.y;
+        } else {
+            this.line.vertices[1].x = 0;
+            this.line.vertices[1].y = 0;
         }
     }
 }
@@ -214,9 +232,11 @@ function moveTouchedVertex(e) {
     // Check for crossing changes
     if (index - 1 >= 0) {
         recheckCrossings(index-1);
+    } else if (include_closure) {
+        recheckCrossings(vertices.length - 1);
     }
     
-    if (index < vertices.length - 1) {
+    if (include_closure || (index < vertices.length - 1)) {
         recheckCrossings(index);
     }
 
@@ -236,21 +256,37 @@ function handleTouchUp(e) {
 
 function addVertex(relPos) {
     var vertex = new LineVertex(relPos, 10);
-    
+
+    touchedVertex = vertex;
     vertices.push( vertex );
+
+    vertex.circle.fill = 'lime';
+    elem.addEventListener('mousemove', moveTouchedVertex);
+    two.update();
+    
+    if (vertices.length == 1) {
+        return
+    }
+    
     if (vertices.length > 1) {
-        vertices[vertices.length - 1].previousVertex = vertices[vertices.length - 2];
-        vertices[vertices.length - 2].nextVertex = vertices[vertices.length - 1];
+        vertices[vertices.length - 2].nextVertex = vertex;
+        recheckCrossings(vertices.length - 2);
+    }
+    vertex.previousVertex = vertices[vertices.length - 2];
+    if (include_closure) {
+        vertex.nextVertex = vertices[0];
+        vertices[0].previousVertex = vertex;
+    }
+
+    if (include_closure) {
+        recheckCrossings(vertices.length - 1);
     }
 
     vertices[vertices.length - 1].positionLine();
+    vertices[0].positionLine();
     
     checkForNewCrossings();
     
-    touchedVertex = vertex;
-    vertex.circle.fill = 'lime';
-    elem.addEventListener('mousemove', moveTouchedVertex);
-
     two.update();
     
     getGaussCode();
@@ -259,14 +295,14 @@ function addVertex(relPos) {
 function findCrossings(lineIndex, crossingCache) {
     
     var v1 = vertices[lineIndex].pos;
-    var v2 = vertices[lineIndex + 1].pos;
+    var v2 = vertices[(lineIndex + 1) % vertices.length].pos;
     var dv = new Two.Vector().sub(v2, v1);
     
     var newCrossings = [];
     
     for (var i=0; i < lineIndex - 1; i++) {
         var ov1 = vertices[i].pos;
-        var ov2 = vertices[i+1].pos;
+        var ov2 = vertices[(i+1) % vertices.length].pos;
         var odv = new Two.Vector().sub(ov2, ov1);
         var intersect = checkIntersection(v1, dv, ov1, odv);
         if (intersect[0]) {
@@ -291,9 +327,13 @@ function findCrossings(lineIndex, crossingCache) {
         }
     }
 
-    for (var i=(lineIndex + 2); i < (vertices.length-1); i++) {
+    var lastVertexChecked = vertices.length - 1;
+    if (include_closure) {
+        lastVertexChecked += 1;
+    }
+    for (var i=(lineIndex + 2); i < lastVertexChecked; i++) {
         var ov1 = vertices[i].pos;
-        var ov2 = vertices[i+1].pos;
+        var ov2 = vertices[(i+1) % vertices.length].pos;
         var odv = new Two.Vector().sub(ov2, ov1);
         var intersect = checkIntersection(ov1, odv, v1, dv);
         if (intersect[0]) {
@@ -412,5 +452,29 @@ function getGaussCode() {
     gcElem.innerHTML = 'Gauss code: <strong>'.concat(gcString, '</strong>');
 }
 
+function changeClosure() {
+    var closureCheckBox = document.getElementById('closure_checkbox');
+    include_closure = closureCheckBox.checked;
+    if (vertices.length < 3) {
+        return
+    }
+    if (include_closure) {
+        vertices[0].previousVertex = vertices[vertices.length - 1];
+    } else {
+        vertices[0].previousVertex = undefined;
+        closureCrossings = extractCrossingsWithIndex(vertices.length - 1);
+        for (var i=0; i < closureCrossings.length; i++) {
+            closureCrossings[i].undraw();
+        }
+    }
+    vertices[0].positionLine();
+    two.update();
+    
+    recheckAllCrossings();
+    getGaussCode();
+}
+
 elem.addEventListener('mousedown', handleTouchDown);
 elem.addEventListener('mouseup', handleTouchUp);
+changeClosure()
+
