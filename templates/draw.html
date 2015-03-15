@@ -14,6 +14,14 @@ Draw - Knot identifier
   Click to draw
 </p>
 
+<form action="" id="draw_form">
+    <div id="form_container">
+    include closure <input type="checkbox"  name="include_closure" value="include_closure" onChange="changeClosure()" id="closure_checkbox">
+    <br>
+    translucent crossings <input type="checkbox"  name="translucency" value="translucency">
+    </div>
+</form>
+
     <div id="draw_page">
     
     <div id="draw-shapes" ondragstart="return false;" ondrop="return false;">
