@@ -212,7 +212,7 @@ function moveTouchedVertex(e) {
     }
     
     // Check for crossing changes
-    if (index - 1 > 0) {
+    if (index - 1 >= 0) {
         recheckCrossings(index-1);
     }
     
