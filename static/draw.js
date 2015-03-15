@@ -24,7 +24,6 @@ function getOffset(el) {
 Crossing = function(pos, angle1, angle2, index1, index2, clockwise, radius) {
     var radius = radius || 10;
     
-    console.log('Making crossing!')
     this.pos = pos;
     this.angle1 = angle1;
     this.angle2 = angle2;
@@ -77,28 +76,22 @@ Crossing.prototype = {
 }
 
 function recheckCrossings(index1, index2) {
-    console.log('===')
-    console.log('initial crossing num', crossings.length)
     var crossings1 = extractCrossingsWithIndex(index1);
     var newCrossings1 = findCrossings(index1, crossings1);
-    console.log('after remove1', crossings.length, newCrossings1.length)
     crossings = crossings.concat(newCrossings1);
     
-    if (crossings.length > 2) {
-        console.log('same?', crossings[-1] === crossings[-2])
-    }
+    // if (crossings.length > 2) {
+    // }
 
     if (index2 >= vertices.length - 1) {
         return;
     }
     var crossings2 = extractCrossingsWithIndex(index2);
     var newCrossings2 = findCrossings(index2, crossings2);
-    console.log('after remove2', crossings.length, newCrossings2.length)
     crossings = crossings.concat(newCrossings2);
 }
 
 function extractCrossingsWithIndex(index) {
-    console.log('--- start extract', crossings.length)
     var extractedCrossings = [];
     for (var i = crossings.length-1; i >= 0; i--) {
         var crossing = crossings[i];
@@ -109,7 +102,6 @@ function extractCrossingsWithIndex(index) {
         }
     }
     extractedCrossings.reverse();
-    console.log('--- end extract', crossings.length, extractedCrossings.length)
     return extractedCrossings;
 }
 
@@ -229,7 +221,7 @@ function moveTouchedVertex(e) {
     }
     recheckCrossings(index-1, index);
 
-    console.log('cs', crossings.toString());
+    getGaussCode();
 }
 
 function handleTouchUp(e) {
@@ -273,7 +265,6 @@ function findCrossings(lineIndex, crossingCache) {
     
     var newCrossings = [];
     
-    console.log('lineIndex is', lineIndex);
     for (var i=0; i < lineIndex - 1; i++) {
         var ov1 = vertices[i].pos;
         var ov2 = vertices[i+1].pos;
@@ -284,7 +275,7 @@ function findCrossings(lineIndex, crossingCache) {
             var angle1 = Math.atan2(dv.y, dv.x);
             var angle2 = Math.atan2(odv.y, odv.x);
             var index1 = i + intersect[2];
-            var index2 = vertices.length - 2 + intersect[1];
+            var index2 = lineIndex + intersect[1];
             var clockwise = (crossProduct(dv.x, dv.y, odv.x, odv.y) > 0) ? false : true;
             var newCrossing = crossingFromCache(crossingCache);
             newCrossing.angle1 = angle1;
@@ -305,13 +296,13 @@ function findCrossings(lineIndex, crossingCache) {
         var ov1 = vertices[i].pos;
         var ov2 = vertices[i+1].pos;
         var odv = new Two.Vector().sub(ov2, ov1);
-        var intersect = checkIntersection(v1, dv, ov1, odv);
+        var intersect = checkIntersection(ov1, odv, v1, dv);
         if (intersect[0]) {
-            var crossingPos = dv.clone().multiplyScalar(intersect[1]).addSelf(v1);
+            var crossingPos = dv.clone().multiplyScalar(intersect[2]).addSelf(v1);
             var angle2 = Math.atan2(dv.y, dv.x);
             var angle1 = Math.atan2(odv.y, odv.x);
-            var index2 = i + intersect[2];
-            var index1 = vertices.length - 2 + intersect[1];
+            var index2 = i + intersect[1];
+            var index1 = lineIndex + intersect[2];
             var clockwise = (crossProduct(odv.x, odv.y, dv.x, dv.y) > 0) ? false : true;
             var newCrossing = crossingFromCache(crossingCache);
             newCrossing.angle1 = angle1;
