@@ -56,8 +56,8 @@ Crossing.prototype = {
     
     alignLine: function(pos) {
         var angle = (this.type === 'over') ? this.angle1 : this.angle2
-        var drx = Math.cos(angle) * this.radius
-        var dry = Math.sin(angle) * this.radius
+        var drx = Math.cos(angle) * this.radius * 1.1
+        var dry = Math.sin(angle) * this.radius * 1.1
         this.line.vertices[0].x = drx
         this.line.vertices[0].y = dry
         this.line.vertices[1].x = -1 * drx
