@@ -1,5 +1,5 @@
 var elem = document.getElementById('draw-shapes');
-var two = new Two({ width: window.innerWidth - 40, height: window.innerHeight - 250}).appendTo(elem);
+var two = new Two({ type: Two.Types.svg, width: window.innerWidth - 40, height: window.innerHeight - 250}).appendTo(elem);
 
 two.update();
 
