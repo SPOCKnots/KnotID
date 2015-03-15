@@ -75,20 +75,12 @@ Crossing.prototype = {
     }
 }
 
-function recheckCrossings(index1, index2) {
-    var crossings1 = extractCrossingsWithIndex(index1);
-    var newCrossings1 = findCrossings(index1, crossings1);
-    crossings = crossings.concat(newCrossings1);
-    
-    // if (crossings.length > 2) {
-    // }
-
-    if (index2 >= vertices.length - 1) {
-        return;
+function recheckCrossings(index) {
+    if ((index >= 0) && (index < vertices.length - 1)) {
+        var crossings1 = extractCrossingsWithIndex(index);
+        var newCrossings1 = findCrossings(index, crossings1);
+        crossings = crossings.concat(newCrossings1);
     }
-    var crossings2 = extractCrossingsWithIndex(index2);
-    var newCrossings2 = findCrossings(index2, crossings2);
-    crossings = crossings.concat(newCrossings2);
 }
 
 function extractCrossingsWithIndex(index) {
@@ -220,7 +212,8 @@ function moveTouchedVertex(e) {
             break;
         }
     }
-    recheckCrossings(index-1, index);
+    recheckCrossings(index-1);
+    recheckCrossings(index);
 
     getGaussCode();
 }
