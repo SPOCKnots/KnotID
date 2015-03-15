@@ -118,6 +118,7 @@ LineVertex = function(pos, radius) {
     this.circle.fill = 'red';
     this.circle.stroke = 'darkred';
     this.circle.linewidth = 3;
+    this.circle.opacity=0.2;
     
     this.line = two.makePolygon(pos.x, pos.y, pos.x, pos.y, true);
     this.line.noFill();
