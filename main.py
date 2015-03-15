@@ -151,6 +151,10 @@ def request_entity_too_large(error):
 def about():
     return render_template('about.html')
 
+@app.route('/draw')
+def draw():
+    return render_template('draw.html')
+
 if __name__ == "__main__":
     #app.run()
-    app.run(debug=False)
+    app.run(debug=True)
