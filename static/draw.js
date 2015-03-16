@@ -294,8 +294,6 @@ function addVertex(relPos) {
     vertices[vertices.length - 1].positionLine();
     vertices[0].positionLine();
     
-    checkForNewCrossings();
-    
     two.update();
     
     getGaussCode();
