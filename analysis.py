@@ -48,6 +48,35 @@ def knot_to_json(k):
     
     return (json.dumps(k.points.tolist()), 2.5*max_extent, extra_stuff)
 
+def gauss_code_to_json(gc):
+    from pyknot2.invariants import alexander
+    from pyknot2.catalogue.identify import from_invariants
+    from pyknot2.catalogue.database import Knot as DBKnot
+
+
+    alex_imag_2 = int(n.round(n.abs(
+        alexander(gc, n.exp(2 * n.pi * 1.j / 2.)))))
+    alex_imag_3 = int(n.round(n.abs(
+        alexander(gc, n.exp(2 * n.pi * 1.j / 3.)))))
+    alex_imag_4 = int(n.round(n.abs(
+        alexander(gc, n.exp(2 * n.pi * 1.j / 4.)))))
+
+    identify_kwargs = {'alex_imag_2': alex_imag_2,
+                       'alex_imag_3': alex_imag_3,
+                       'alex_imag_4': alex_imag_4}
+    num_crossings = len(gc) 
+    if num_crossings < 16:
+        identify_kwargs['other'] = (
+            DBKnot.min_crossings <= num_crossings, )
+
+    identification = from_invariants(**identify_kwargs)
+
+    analysis = {'alex_roots': (alex_imag_2, alex_imag_3,
+                               alex_imag_4),
+                'identification': identification}
+
+    return analysis
+
 
 def torus_knot_to_json(p, q):
     
