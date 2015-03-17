@@ -164,7 +164,7 @@ def analyse():
 
     from pyknot2.representations import GaussCode
 
-    gc_string = args['gausscode'].replace('b', '+')
+    gc_string = str(args['gausscode'].replace('b', '+'))
     print('trying to parse', gc_string, len(gc_string), type(gc_string))
     try:
         gc = GaussCode(gc_string)
