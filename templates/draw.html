@@ -10,30 +10,55 @@ Draw - Knot identifier
 
 {% block body %}
 <script src="static/two.js"></script>
-<p>
-  Click to draw
-</p>
+<div>
 
-<form action="" id="draw_form">
-    <div id="form_container">
-    include closure <input type="checkbox"  name="include_closure" value="include_closure" onChange="changeClosure()" id="closure_checkbox">
-    <br>
-    translucent crossings <input type="checkbox"  name="translucency" value="translucency" onChange="changeTranslucency()"id="translucency_checkbox">
+    <div id="plot_container">
+        <form action="" id="draw_form">
+            <div id="form_container">
+                include closure <input type="checkbox"  name="include_closure" value="include_closure" onChange="changeClosure()" id="closure_checkbox">
+                <br>
+                translucent crossings <input type="checkbox"  name="translucency" value="translucency" onChange="changeTranslucency()"id="translucency_checkbox">
+            </div>
+        </form>
+
+        <div id="draw_page">
+            
+            <div id="canvas_container" ondragstart="return false;" ondrop="return false;">
+            </div>
+
+            <script src="static/draw.js"></script>
+        </div>
+
     </div>
-</form>
 
-    <div id="draw_page">
-    
-    <div id="draw-shapes" ondragstart="return false;" ondrop="return false;">
+    <div id="results_container">
+        <div class="center_thin">
+            <p>
+                Click and drag to add and move vertices. Click on crossings to switch the over- and under-strands.
+            </p>
+
+            <div class="scroll_title">
+                Gauss code:
+            </div>
+            <div class="gauss_code" >
+                <p id="gc_output">
+                    <strong>----</strong>
+                </p>
+            </div>
+            
+            <div id="analyse_button_container">
+            <button onClick="uploadGaussCode()">
+                analyse Gauss code
+            </button>
+            </div>
+            
+            <div id="analysis_result">
+            </div>
+
+        </div>
     </div>
+</div>
 
-    <script src="static/draw.js"></script>
-    </div>
 
-<p id="gc_output">
-  Gauss code: <strong>----</strong>
-</p>
-    
-    
 
 {% endblock %}
