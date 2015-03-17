@@ -465,7 +465,7 @@ function getGaussCode() {
 
 function uploadGaussCode() {
     var request = new XMLHttpRequest();
-    request.open('GET', 'api/analyse?gausscode=' + gaussCode.replace('+', 'b'), true);
+    request.open('GET', 'api/analyse?gausscode=' + gaussCode.split('+').join('b'), true);
     request.send();
     request.onreadystatechange = function() {
         if (request.readyState == 4 && request.status == 200) {
