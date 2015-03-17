@@ -1,5 +1,6 @@
-var elem = document.getElementById('draw-shapes');
-var two = new Two({ type: Two.Types.svg, width: window.innerWidth - 40, height: window.innerHeight - 250}).appendTo(elem);
+var elem = document.getElementById('canvas_container');
+var winSize = 0.45 * window.innerWidth;
+var two = new Two({ type: Two.Types.svg, width: winSize, height: winSize - 50}).appendTo(elem);
 
 two.update();
 
@@ -8,6 +9,7 @@ var vertices = [];
 var crossings = [];
 var include_closure = false;
 var translucency = false;
+var gaussCode = '';
 
 var touchedVertex = undefined;
 
@@ -455,9 +457,24 @@ function getGaussCode() {
         gcString = '----';
     }
     
+    gaussCode = gcString;
+    
     var gcElem = document.getElementById('gc_output');
-    gcElem.innerHTML = 'Gauss code: <strong>'.concat(gcString, '</strong>');
+    gcElem.innerHTML = '<strong>'.concat(gcString, '</strong>');
 }
+
+function uploadGaussCode() {
+    var request = new XMLHttpRequest();
+    request.open('GET', 'api/analyse?gausscode=' + gaussCode.replace('+', 'b'), true);
+    request.send();
+    request.onreadystatechange = function() {
+        if (request.readyState == 4 && request.status == 200) {
+            var resultElem = document.getElementById('analysis_result');
+            resultElem.innerHTML = request.responseText;
+        }
+    }
+}
+
 
 function changeTranslucency() {
     var translucencyCheckBox = document.getElementById('translucency_checkbox');
