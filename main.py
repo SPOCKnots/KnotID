@@ -1,7 +1,8 @@
 from __future__ import print_function
 from flask import (Flask, url_for, render_template, request, redirect,
                    flash, Blueprint)
-from analysis import text_to_json, torus_knot_to_json
+from analysis import (text_to_json, torus_knot_to_json,
+                      gauss_code_to_json)
 from fractions import gcd
 
 class ReverseProxied(object):
@@ -154,6 +155,25 @@ def about():
 @app.route('/draw')
 def draw():
     return render_template('draw.html')
+
+@app.route('/api/analyse')
+def analyse():
+    args = request.args
+    if 'gausscode' not in args:
+        return 'FAIL: Gauss code not received'
+
+    from pyknot2.representations import GaussCode
+
+    gc_string = args['gausscode'].replace('b', '+')
+    print('trying to parse', gc_string, len(gc_string), type(gc_string))
+    try:
+        gc = GaussCode(gc_string)
+    except:
+        return 'FAIL: Gauss code could not be parsed'
+            
+    analysis = gauss_code_to_json(gc)
+
+    return render_template('knot_invariants.html', **analysis)
 
 if __name__ == "__main__":
     #app.run()
