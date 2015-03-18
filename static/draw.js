@@ -464,12 +464,14 @@ function getGaussCode() {
 }
 
 function uploadGaussCode() {
+    var resultElem = document.getElementById('analysis_result');
+    resultElem.innerHTML = '<div class="loader">Loading...</div>'
+
     var request = new XMLHttpRequest();
     request.open('GET', 'api/analyse?gausscode=' + gaussCode.split('+').join('b'), true);
     request.send();
     request.onreadystatechange = function() {
         if (request.readyState == 4 && request.status == 200) {
-            var resultElem = document.getElementById('analysis_result');
             resultElem.innerHTML = request.responseText;
         }
     }
