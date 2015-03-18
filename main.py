@@ -164,16 +164,11 @@ def analyse():
 
     from pyknot2.representations import GaussCode
 
-    gc_string = str(args['gausscode'].replace('b', '+'))
-    print('trying to parse', gc_string, len(gc_string), type(gc_string))
-    try:
-        gc = GaussCode(gc_string)
-    except:
-        return 'FAIL: Gauss code could not be parsed'
-            
-    analysis = gauss_code_to_json(gc)
+    analysis = gauss_code_to_json(args['gausscode'].replace('b', '+'))
+    if analysis[0]:
+        return analysis
 
-    return render_template('knot_invariants.html', **analysis)
+    return render_template('knot_invariants.html', **analysis[1])
 
 if __name__ == "__main__":
     #app.run()

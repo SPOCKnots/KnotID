@@ -25,14 +25,36 @@ def knot_to_json(k):
     k.rotate(n.array([0.001, 0.002, 0.0015]))
     k.zero_centroid()
     max_extent = n.max(n.max(n.abs(k.points), axis=0))
-    gc_string = str(k.gauss_code())
-    identification = k.identify()
-        
-    extra_stuff = {'identification': identification,
-                   'gauss_code': gc_string,
-                   'alex_roots': k.alexander_at_root((2, 3, 4)),
+
+    analysis = representation_to_json(k.representation())
+    
+    return (json.dumps(k.points.tolist()), 2.5*max_extent, analysis)
+
+
+def gauss_code_to_json(gc):
+    from pyknot2.representations.representation import Representation
+    print('trying to parse', gc, len(gc))
+    try:
+        representation = Representation(str(gc))
+    except:
+        return (True, 'FAIL: Gauss code could not be parsed')
+
+    return (False, representation_to_json(representation))
+
+def representation_to_json(representation):
+
+    identification = representation.identify()
+    identification_perfect = len(representation) < 14
+    
+    analysis = {'identification': identification,
+                'identification_perfect': identification_perfect,
+                'gauss_code': str(representation),
+                'alex_roots': representation.alexander_at_root((2, 3, 4)),
                    # 'hyp_vol': str(k.hyperbolic_volume()),
-                   'vassiliev_degree_2': k.vassiliev_degree_2()}
+                'vassiliev_degree_2': representation.vassiliev_degree_2()}
+
+    if len(representation) < 10:
+        analysis['vassiliev_degree_3'] = representation.vassiliev_degree_3()
 
     # try:
     #     gc = k.gauss_code()
@@ -44,38 +66,9 @@ def knot_to_json(k):
     # except ValueError, RuntimeError:
     #     print('ValueError in alexander calculation, only a problem '
     #           'if running in debug mode.')
-    
-    
-    return (json.dumps(k.points.tolist()), 2.5*max_extent, extra_stuff)
-
-def gauss_code_to_json(gc):
-    from pyknot2.invariants import alexander
-    from pyknot2.catalogue.identify import from_invariants
-    from pyknot2.catalogue.database import Knot as DBKnot
-
-
-    alex_imag_2 = int(n.round(n.abs(
-        alexander(gc, n.exp(2 * n.pi * 1.j / 2.)))))
-    alex_imag_3 = int(n.round(n.abs(
-        alexander(gc, n.exp(2 * n.pi * 1.j / 3.)))))
-    alex_imag_4 = int(n.round(n.abs(
-        alexander(gc, n.exp(2 * n.pi * 1.j / 4.)))))
-
-    identify_kwargs = {'alex_imag_2': alex_imag_2,
-                       'alex_imag_3': alex_imag_3,
-                       'alex_imag_4': alex_imag_4}
-    num_crossings = len(gc) 
-    if num_crossings < 16:
-        identify_kwargs['other'] = (
-            DBKnot.min_crossings <= num_crossings, )
-
-    identification = from_invariants(**identify_kwargs)
-
-    analysis = {'alex_roots': (alex_imag_2, alex_imag_3,
-                               alex_imag_4),
-                'identification': identification}
 
     return analysis
+    
 
 
 def torus_knot_to_json(p, q):
