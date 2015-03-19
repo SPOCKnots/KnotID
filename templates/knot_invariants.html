@@ -1,4 +1,8 @@
-{% if simplified_gauss_code %}
+{% if num_crossings %}
+<p>The initial Gauss code has {{ num_crossings }} crossings.{% if reduced_num_crossings %}{% if reduced_num_crossings == num_crossings %} This could not be reduced by the application of Reidemeister moves 1 or 2.{% else %} This was reduced to {{ reduced_num_crossings }} crossings via Reidemeister moves 1 and 2.{% endif %}{% endif %}</p>
+{% endif %}
+
+{% if (simplified_gauss_code and (reduced_num_crossings < num_crossings)) %}
 <div class="scroll_title">
     Simplified Gauss code:
 </div>
