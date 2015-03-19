@@ -473,6 +473,7 @@ function uploadGaussCode() {
     request.onreadystatechange = function() {
         if (request.readyState == 4 && request.status == 200) {
             resultElem.innerHTML = request.responseText;
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
         }
     }
 }
