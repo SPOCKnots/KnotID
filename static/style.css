@@ -267,15 +267,18 @@ input[type=checkbox], input[type=radio] {
 }
 
 
+.invariants {
+    padding-top: 15px;
+}
 
 .invariants td {
     padding: 5px;
     text-align: center;
     border: 2px solid white;
-    background-color: #eeeeff;
     background-clip: padding-box;
     border-radius: 5px;
 }
+
 
 .alignleft {
     text-align: left;
@@ -289,6 +292,22 @@ input[type=checkbox], input[type=radio] {
     border: 2px solid white;
     background-clip: padding-box;
     border-radius: 5px;
+}
+
+.invariants td.test {
+    background-color: #FFF;
+}
+
+.invariants td.invariant {
+    background-color: #eeeeff;
+}
+
+.invariants td.fact {
+    background-color: #deffde;
+}
+
+.invariants td.identification {
+    background-color: #ffeeee;
 }
 
 .invariants td + td {

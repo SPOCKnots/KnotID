@@ -1,6 +1,3 @@
-{% if num_crossings %}
-<p>The initial Gauss code has {{ num_crossings }} crossings.{% if reduced_num_crossings %}{% if reduced_num_crossings == num_crossings %} This could not be reduced by the application of Reidemeister moves 1 or 2.{% else %} This was reduced to {{ reduced_num_crossings }} crossings via Reidemeister moves 1 and 2.{% endif %}{% endif %}</p>
-{% endif %}
 
 {% if (simplified_gauss_code and (reduced_num_crossings < num_crossings)) %}
 <div class="scroll_title">
@@ -28,12 +25,27 @@ maintainer.</p>
 
 <table class="invariants">
     <tr><th>Invariant</th><th>Value</th></tr>
+    
+    {% if num_crossings %}
     <tr>
-        <td>Alexander polynomial \(\Delta(t)\)</td>
+        <td class="fact">Initial crossing number</td>
+        <td class="fact">{{ num_crossings }}</td>
+    </tr>
+    {% endif %}
+
+    {% if reduced_num_crossings %}
+    <tr>
+        <td class="fact">Reduced crossing number</td>
+        <td class="fact">{{ reduced_num_crossings }}</td>
+    </tr>
+    {% endif %}
+
+    <tr>
+        <td class="invariant">Alexander polynomial \(\Delta(t)\)</td>
         {% if alexander %}
-        <td>\({{ alexander }}\)</td>
+        <td class="invariant">\({{ alexander }}\)</td>
         {% else %}
-        <td class="alignleft">
+        <td class="invariant">
             Didn't calculate the full Alexander polynomial as pari-gp
             isn't installed on this server yet.
         </td>
@@ -43,18 +55,18 @@ maintainer.</p>
 
     {% if alex_roots %}
     <tr> 
-        <td>Determinant \(|\Delta(-1)|\)</td> 
-        <td>{{ alex_roots[0] }}</td>
+        <td class="invariant">Determinant \(|\Delta(-1)|\)</td> 
+        <td class="invariant">{{ alex_roots[0] }}</td>
     </tr>
 
     <tr>
-        <td>\(|\Delta(\exp(2\pi i/3)|\)</td>
-        <td>{{ alex_roots[1] }}</td>
+        <td class="invariant">\(|\Delta(\exp(2\pi i/3)|\)</td>
+        <td class="invariant">{{ alex_roots[1] }}</td>
     </tr>
     
     <tr>
-        <td>\(|\Delta(i)|\)</td>
-        <td>{{ alex_roots[2] }}</td>
+        <td class="invariant">\(|\Delta(i)|\)</td>
+        <td class="invariant">{{ alex_roots[2] }}</td>
     </tr>
     
     {% endif %}
@@ -62,24 +74,37 @@ maintainer.</p>
 
     {% if vassiliev_degree_2 is defined %}
     <tr>
-        <td>Vassiliev order 2, \(v_2\)</td>
-        <td>{{ vassiliev_degree_2 }}</td>
+        <td class="invariant">Vassiliev order 2, \(v_2\)</td>
+        <td class="invariant">{{ vassiliev_degree_2 }}</td>
     </tr>
     {% endif %}
 
     {% if vassiliev_degree_3 is defined %}
     <tr>
-        <td>Vassiliev order 3, \(v_3\)</td>
-        <td>{{ vassiliev_degree_3 }}</td>
+        <td class="invariant">Vassiliev order 3, \(v_3\)</td>
+        <td class="invariant">{{ vassiliev_degree_3 }}</td>
     </tr>
     {% endif %}
 
     {% if hyp_vol is defined %}
     <tr>
-        <td>hyperbolic volume</td>
-        <td>{{ hyp_vol }}</td>
+        <td class="invariant">hyperbolic volume</td>
+        <td class="invariant">{{ hyp_vol }}</td>
     </tr>
     {% endif %}
+    
+    {% if identification %}
+    <tr>
+        {% if identification_perfect %}
+        <td class="identification">Unambiguous identification</td>
+        {% else %}
+        <td>Incomplete identification</td>
+        {% endif %}
+        <td class="identification">
+            {% for knot in identification %}<a href="http://katlas.org/wiki/{{ knot.identifier }}">{{ knot.identifier }}</a>{% if not loop.last %}, {% endif %}{% endfor %}.
+        </td>
+    {% endif %}
+    </tr>
 </table>
 
 {% if identification %}
