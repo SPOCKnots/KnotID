@@ -49,9 +49,17 @@ Didn't calculate the full Alexander polynomial as pari-gp isn't installed on thi
 {% endif %}
 
 {% if identification %}
-<p>First 3 Alexander roots and the number of counted crossings match these prime knots:
+{% if identification_perfect %}
+{% if identification|length == 1 %}
+<p>This is knot <a href="http://katlas.org/wiki/{{ identification[0].identifier }}">{{ identification[0].identifier }}</a>{% if identification[0].identifier == '0_1' %}: it is <emph>not</emph> knotted.{% else %}.{% endif %}</p>
+{% else %}
+<p>This is one of the knots {% for knot in identification %}<a href="http://katlas.org/wiki/{{ knot.identifier }}">{{ knot.identifier }}</a>{% if not loop.last %}, {% endif %}{% endfor %}.</p>
+{% endif %}
+{% else %}
+<p>First 3 Alexander roots and the number of counted crossings match these prime knots (but may also match more):
   {% for knot in identification %}<a href="http://katlas.org/wiki/{{ knot.identifier }}">{{ knot.identifier }}</a>{% if not loop.last %}, {% endif %}{% endfor %}.
 </p>
+{% endif %}
 {% else %}
 <p>Could not identify any knots with the same Alexander roots 2, 3, 4.</p>
 {% endif %}
