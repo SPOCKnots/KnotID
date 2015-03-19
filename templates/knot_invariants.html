@@ -26,37 +26,66 @@ maintainer.</p>
 
 {% else %}
 
-{% if alex_roots %}
-<p>Determinant is {{ alex_roots[0] }}.</p>
+<table class="invariants">
+    <tr><th>Invariant</th><th>Value</th></tr>
+    <tr>
+        <td>Alexander polynomial \(\Delta(t)\)</td>
+        {% if alexander %}
+        <td>\({{ alexander }}\)</td>
+        {% else %}
+        <td class="alignleft">
+            Didn't calculate the full Alexander polynomial as pari-gp
+            isn't installed on this server yet.
+        </td>
+        {% endif %}
+    </tr>
 
-<p>Alexander polynomial evaluated at second and third roots of unity is {{ alex_roots[1] }} and {{ alex_roots[2] }} respectively.</p>
-{% endif %}
 
-Didn't calculate the full Alexander polynomial as pari-gp isn't installed on this server yet.
-{#
-{% if alexander %}
-<p>Full alexander polynomial is \({{ alexander }}\).</p>
-{% else %}
-<p>Didn't calculate full Alexander polynomial. This is only enabled if there are fewer than 50 crossings in the projection.</p>
-{% endif %}
-#}
+    {% if alex_roots %}
+    <tr> 
+        <td>Determinant \(\Delta(-1)\)</td> 
+        <td>{{ alex_roots[0] }}</td>
+    </tr>
 
-{% if vassiliev_degree_2 is defined %}
-<p>Vassilev invariant of order 2 is {{ vassiliev_degree_2 }}.</p>
-{% endif %}
+    <tr>
+        <td>\(\Delta(\exp(2\pi i/3)\)</td>
+        <td>{{ alex_roots[1] }}</td>
+    </tr>
+    
+    <tr>
+        <td>\(\Delta(i)\)</td>
+        <td>{{ alex_roots[2] }}</td>
+    </tr>
+    
+    {% endif %}
 
-{% if vassiliev_degree_3 is defined %}
-<p>Vassilev invariant of order 3 is {{ vassiliev_degree_3 }}.</p>
-{% endif %}
 
-{% if hyp_vol %}
-<p>Hyperbolic volume is {{ hyp_vol }}.</p>
-{% endif %}
+    {% if vassiliev_degree_2 is defined %}
+    <tr>
+        <td>Vassiliev order 2, \(v_2\)</td>
+        <td>{{ vassiliev_degree_2 }}</td>
+    </tr>
+    {% endif %}
+
+    {% if vassiliev_degree_3 is defined %}
+    <tr>
+        <td>Vassiliev order 3, \(v_3\)</td>
+        <td>{{ vassiliev_degree_3 }}</td>
+    </tr>
+    {% endif %}
+
+    {% if hyp_vol is defined %}
+    <tr>
+        <td>hyperbolic volume</td>
+        <td>{{ hyp_vol }}</td>
+    </tr>
+    {% endif %}
+</table>
 
 {% if identification %}
 {% if identification_perfect %}
 {% if identification|length == 1 %}
-<p>This is knot <a href="http://katlas.org/wiki/{{ identification[0].identifier }}">{{ identification[0].identifier }}</a>{% if identification[0].identifier == '0_1' %}: it is <emph>not</emph> knotted.{% else %}.{% endif %}</p>
+<p>This is knot <a href="http://katlas.org/wiki/{{ identification[0].identifier }}">\({{ identification[0].identifier }}\)</a>{% if identification[0].identifier == '0_1' %}: it is <emph>not</emph> knotted.{% else %}.{% endif %}</p>
 {% else %}
 <p>This is one of the knots {% for knot in identification %}<a href="http://katlas.org/wiki/{{ knot.identifier }}">{{ knot.identifier }}</a>{% if not loop.last %}, {% endif %}{% endfor %}.</p>
 {% endif %}
