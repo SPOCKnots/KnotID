@@ -265,3 +265,32 @@ input[type=checkbox], input[type=radio] {
         height: 5em;
     }
 }
+
+
+
+.invariants td {
+    padding: 5px;
+    text-align: center;
+    border: 2px solid white;
+    background-color: #eeeeff;
+    background-clip: padding-box;
+    border-radius: 5px;
+}
+
+.alignleft {
+    text-align: left;
+}
+
+.invariants th {
+    background-color: #ddddff;
+    font-weight: bold;
+    padding: 5px;
+    background-clip: padding-box;
+    border: 2px solid white;
+    background-clip: padding-box;
+    border-radius: 5px;
+}
+
+.invariants td + td {
+    width: 50%;
+}
