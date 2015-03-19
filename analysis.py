@@ -41,20 +41,32 @@ def gauss_code_to_json(gc):
 
     return (False, representation_to_json(representation))
 
-def representation_to_json(representation):
+def representation_to_json(rep):
+    gc_string = str(rep)
+    is_virtual = rep.is_virtual()
+    self_linking = rep.self_linking()
 
-    identification = representation.identify()
-    identification_perfect = len(representation) < 14
+    if is_virtual:
+        return {'is_virtual': is_virtual,
+                'self_linking': self_linking}
+    rep.simplify()
+    simplified_gc_string = str(rep)
+
+    identification = rep.identify()
+    identification_perfect = len(rep) < 14
     
     analysis = {'identification': identification,
                 'identification_perfect': identification_perfect,
-                'gauss_code': str(representation),
-                'alex_roots': representation.alexander_at_root((2, 3, 4)),
+                'gauss_code': gc_string,
+                'simplified_gauss_code': simplified_gc_string,
+                'alex_roots': rep.alexander_at_root((2, 3, 4),
+                                                    force_no_simplify=True),
                    # 'hyp_vol': str(k.hyperbolic_volume()),
-                'vassiliev_degree_2': representation.vassiliev_degree_2()}
+                'vassiliev_degree_2': rep.vassiliev_degree_2(False),
+                }
 
-    if len(representation) < 10:
-        analysis['vassiliev_degree_3'] = representation.vassiliev_degree_3()
+    if len(rep) < 10:
+        analysis['vassiliev_degree_3'] = rep.vassiliev_degree_3(False)
 
     # try:
     #     gc = k.gauss_code()
@@ -66,6 +78,8 @@ def representation_to_json(representation):
     # except ValueError, RuntimeError:
     #     print('ValueError in alexander calculation, only a problem '
     #           'if running in debug mode.')
+
+    print('analysis is', analysis)
 
     return analysis
     
