@@ -54,7 +54,9 @@ def representation_to_json(rep):
     simplified_gc_string = str(rep)
     simplified_gc_length = len(rep)
 
-    identification = rep.identify()
+    identification = [
+        (knot.identifier,
+         identifier_to_latex(knot.identifier)) for knot in rep.identify()]
     identification_perfect = len(rep) < 14
     
     analysis = {'identification': identification,
@@ -92,3 +94,8 @@ def representation_to_json(rep):
 def torus_knot_to_json(p, q):
     
     return knot_to_json(Knot(torus_knot(p, q, 300)*10, verbose=False))
+
+def identifier_to_latex(i):
+    if '_' in i:
+        return ''.join([i.replace('_', '_{'), '}'])
+    return i
