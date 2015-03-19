@@ -45,12 +45,14 @@ def representation_to_json(rep):
     gc_string = str(rep)
     is_virtual = rep.is_virtual()
     self_linking = rep.self_linking()
+    gc_length = len(rep)
 
     if is_virtual:
         return {'is_virtual': is_virtual,
                 'self_linking': self_linking}
     rep.simplify()
     simplified_gc_string = str(rep)
+    simplified_gc_length = len(rep)
 
     identification = rep.identify()
     identification_perfect = len(rep) < 14
@@ -58,6 +60,8 @@ def representation_to_json(rep):
     analysis = {'identification': identification,
                 'identification_perfect': identification_perfect,
                 'gauss_code': gc_string,
+                'num_crossings': gc_length,
+                'reduced_num_crossings': simplified_gc_length,
                 'simplified_gauss_code': simplified_gc_string,
                 'alex_roots': rep.alexander_at_root((2, 3, 4),
                                                     force_no_simplify=True),
