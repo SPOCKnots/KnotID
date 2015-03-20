@@ -99,11 +99,16 @@ maintainer.</p>
         {% if identification_perfect %}
         <td class="identification">Unambiguous identification</td>
         {% else %}
-        <td>Incomplete identification</td>
+        <td class="identification">Incomplete identification</td>
         {% endif %}
         <td class="identification">
-            {% for knot in identification %}<a href="http://katlas.org/wiki/{{ knot[0] }}">\({{ knot[1] }}\)</a>{% if not loop.last %}, {% endif %}{% endfor %}.
+            {% for knot in identification %}<a href="http://katlas.org/wiki/{{ knot[0] }}">\({{ knot[1] }}\)</a>{% if not loop.last %}, {% endif %}{% endfor %}
         </td>
+    </tr>
+    {% else %}
+    <tr>
+        <td class="identification">Identification</td>
+        <td class="identification">No matching prime knots with fewer than 15 crossings.</td>
     {% endif %}
     </tr>
 </table>
