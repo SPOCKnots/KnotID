@@ -286,7 +286,8 @@ input[type=checkbox], input[type=radio] {
 }
 
 .invariants th {
-    background-color: #ddddff;
+    background-color: #ccccff;
+    font-size: 17px;
     font-weight: bold;
     padding: 5px;
     background-clip: padding-box;
@@ -300,7 +301,7 @@ input[type=checkbox], input[type=radio] {
 }
 
 .invariants td.invariant {
-    background-color: #eeeeff;
+    background-color: #dedeff;
 }
 
 .invariants td.fact {
@@ -308,7 +309,7 @@ input[type=checkbox], input[type=radio] {
 }
 
 .invariants td.identification {
-    background-color: #ffeeee;
+    background-color: #ffdede;
 }
 
 .invariants td + td {
