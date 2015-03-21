@@ -41,3 +41,31 @@ class CachedGaussCode(BaseModel):
     is_virtual = BooleanField(null=True)
 
     self_linking = BooleanField(null=True)
+
+if __name__ == "__main__":
+    import sys
+    import os
+    if len(sys.argv) == 1:
+        print('No mode specified.')
+        exit()
+
+    mode = sys.argv[1]
+    if mode == 'reset':
+        db.connect()
+        num_cached = CachedGaussCode.select().count()
+        db.close()
+
+        os.remove('cache.db')
+        db.connect()
+        CachedGaussCode.create_table()
+        num_after = CachedGaussCode.select().count()
+        db.close()
+        print('Reset database, went from {} to {} cached.'.format(
+            num_cached, num_after))
+        exit()
+
+    print('Invalid mode specified. Should be "reset".')
+    
+        
+    
+        
