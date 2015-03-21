@@ -133,6 +133,8 @@ def analysis_from_cache(cache, gauss_code, num_crossings):
     else:
         analysis['identification'] = []
 
+    print('cache vassiliev', cache.vassiliev_degree_2, cache.vassiliev_degree_3)
+
     return analysis
             
 def cache_from_analysis(analysis):
@@ -149,9 +151,9 @@ def cache_from_analysis(analysis):
         cache.determinant = roots[0]
         cache.alex_imag_3 = roots[1]
         cache.alex_imag_4 = roots[2]
-    if 'vassilev_degree_2' in analysis:
+    if 'vassiliev_degree_2' in analysis:
         cache.vassiliev_degree_2 = analysis['vassiliev_degree_2']
-    if 'vassilev_degree_3' in analysis:
+    if 'vassiliev_degree_3' in analysis:
         cache.vassiliev_degree_3 = analysis['vassiliev_degree_3']
     if 'identification' in analysis:
         cache.identification = json.dumps(analysis['identification'])
