@@ -42,6 +42,8 @@ class CachedGaussCode(BaseModel):
 
     self_linking = BooleanField(null=True)
 
+    num_times_accessed = IntegerField(default=1)
+
 if __name__ == "__main__":
     import sys
     import os

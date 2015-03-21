@@ -51,6 +51,10 @@ def cached_from_gauss_code(gc):
     db.connect()
     cached = CachedGaussCode.select().where(CachedGaussCode.gauss_code == gc)
     first = cached.first()  # this may be None
+    if first is not None:
+        first.num_times_accessed = first.num_times_accessed + 1
+        first.save()
+        print('gc accessed {} times'.format(first.num_times_accessed))
     db.close()
 
     return first
@@ -132,8 +136,6 @@ def analysis_from_cache(cache, gauss_code, num_crossings):
         analysis['identification'] = identification
     else:
         analysis['identification'] = []
-
-    print('cache vassiliev', cache.vassiliev_degree_2, cache.vassiliev_degree_3)
 
     return analysis
             
