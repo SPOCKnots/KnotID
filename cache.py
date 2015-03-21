@@ -51,11 +51,14 @@ if __name__ == "__main__":
 
     mode = sys.argv[1]
     if mode == 'reset':
-        db.connect()
-        num_cached = CachedGaussCode.select().count()
-        db.close()
+        if os.path.exists('cache.db'):
+            db.connect()
+            num_cached = CachedGaussCode.select().count()
+            db.close()
 
-        os.remove('cache.db')
+            os.remove('cache.db')
+        else:
+            num_cached = 0
         db.connect()
         CachedGaussCode.create_table()
         num_after = CachedGaussCode.select().count()
