@@ -38,6 +38,8 @@ class CachedGaussCode(BaseModel):
 
     identification = CharField(null=True)
 
+    identification_perfect = BooleanField(null=True)
+
     is_virtual = BooleanField(null=True)
 
     self_linking = BooleanField(null=True)

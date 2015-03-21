@@ -136,6 +136,11 @@ def analysis_from_cache(cache, gauss_code, num_crossings):
         analysis['identification'] = identification
     else:
         analysis['identification'] = []
+    if cache.identification_perfect is not None:
+        analysis['identification_perfect'] = cache.identification_perfect
+    else:
+        analysis['identification_perfect'] = False
+            
 
     return analysis
             
@@ -159,6 +164,9 @@ def cache_from_analysis(analysis):
         cache.vassiliev_degree_3 = analysis['vassiliev_degree_3']
     if 'identification' in analysis:
         cache.identification = json.dumps(analysis['identification'])
+    if 'identification_perfect' in analysis:
+        cache.identification_perfect = analysis['identification_perfect']
+            
     cache.save()
     db.close()
             
