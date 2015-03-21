@@ -4,6 +4,8 @@ import json
 from pyknot2.spacecurves import Knot
 from pyknot2.make.torus import knot as torus_knot
 
+from cache import CachedGaussCode, db
+
 
 
 def text_to_json(text):
@@ -41,6 +43,19 @@ def gauss_code_to_json(gc):
 
     return (False, representation_to_json(representation))
 
+def cached_from_gauss_code(gc):
+    '''
+    Takes a Gauss code as a string, checks if it is in the cache
+    database, and returns it if so.
+    '''
+    db.connect()
+    cached = CachedGaussCode.select().where(CachedGaussCode.gauss_code == gc)
+    first = cached.first()  # this may be None
+    db.close()
+
+    return first
+
+
 def representation_to_json(rep):
     gc_string = str(rep)
     is_virtual = rep.is_virtual()
@@ -53,6 +68,12 @@ def representation_to_json(rep):
     rep.simplify()
     simplified_gc_string = str(rep)
     simplified_gc_length = len(rep)
+
+    from pyknot2.catalogue.database import Knot
+    cached = cached_from_gauss_code(simplified_gc_string)
+    if cached is not None:
+        print('gc was cached!')
+        return analysis_from_cache(cached, gc_string, gc_length)
 
     identification = [
         (knot.identifier,
@@ -87,9 +108,59 @@ def representation_to_json(rep):
 
     print('analysis is', analysis)
 
+    cache_from_analysis(analysis)
+
     return analysis
     
+def analysis_from_cache(cache, gauss_code, num_crossings):
+    analysis = {'gauss_code': gauss_code,
+                'num_crossings': num_crossings}
+    analysis['simplified_gauss_code'] = cache.gauss_code
+    analysis['reduced_num_crossings'] = cache.num_crossings
+    if cache.alexander is not None:
+        analysis['alexander'] = cache.alexander
+    if cache.determinant is not None:
+        analysis['alex_roots'] = (cache.determinant,
+                                  cache.alex_imag_3,
+                                  cache.alex_imag_4)
+    if cache.vassiliev_degree_2 is not None:
+        analysis['vassiliev_degree_2'] = cache.vassiliev_degree_2
+    if cache.vassiliev_degree_3 is not None:
+        analysis['vassiliev_degree_3'] = cache.vassiliev_degree_3
+    if cache.identification is not None:
+        identification = json.loads(cache.identification)
+        analysis['identification'] = identification
+    else:
+        analysis['identification'] = []
 
+    return analysis
+            
+def cache_from_analysis(analysis):
+    db.connect()
+    cache = CachedGaussCode(gauss_code=analysis['simplified_gauss_code'])
+    if 'reduced_num_crossings' in analysis:
+        cache.num_crossings = analysis['reduced_num_crossings']
+    if 'alexander' in analysis:
+        cache.alexander = analysis['alexander']
+    if 'hyp_vol' in analysis:
+        cache.alexander = str(analysis['hyp_vol'])
+    if 'alex_roots' in analysis:
+        roots = analysis['alex_roots']
+        cache.determinant = roots[0]
+        cache.alex_imag_3 = roots[1]
+        cache.alex_imag_4 = roots[2]
+    if 'vassilev_degree_2' in analysis:
+        cache.vassiliev_degree_2 = analysis['vassiliev_degree_2']
+    if 'vassilev_degree_3' in analysis:
+        cache.vassiliev_degree_3 = analysis['vassiliev_degree_3']
+    if 'identification' in analysis:
+        cache.identification = json.dumps(analysis['identification'])
+    cache.save()
+    db.close()
+            
+            
+
+            
 
 def torus_knot_to_json(p, q):
     
