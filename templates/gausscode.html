@@ -1,0 +1,53 @@
+{% extends "body_centred.html" %}
+
+{% block header_title %}
+: Gauss code analysis
+{% endblock %}
+
+{% block title %}
+Gauss code analysis - Knot identifier
+{% endblock %}
+
+{% block centred_body %}
+
+<p>Enter a Gauss code below. Currently this must be sets of a number,
++/- and a/c, e.g. 1-c,2+c,3-c,1+c,2-c,3+c for the trefoil knot.
+</p>
+
+<div class="centred">
+  <textarea name="gausscode" cols="40" rows="5" id="gausscode_box"></textarea>
+  <br>
+            <button onClick="uploadGaussCode()">
+                analyse Gauss code
+            </button>
+</div>
+
+<div id="analysis_result">
+</div>
+
+<script>
+function uploadGaussCode() {
+    console.log('called!');
+    var resultElem = document.getElementById('analysis_result');
+    resultElem.innerHTML = '<div class="loader">Loading...</div>'
+    
+    var inputElem = document.getElementById('gausscode_box');
+    var gaussCode = inputElem.value;
+
+    var request = new XMLHttpRequest();
+    request.open('GET', 'api/analyse?gausscode=' + gaussCode.split('+').join('b'), true);
+    request.send();
+    request.onreadystatechange = function() {
+        if (request.readyState == 4 && request.status == 200) {
+            resultElem.innerHTML = request.responseText;
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        }
+    }
+}
+</script>
+
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML">
+</script>
+
+{% endblock %}

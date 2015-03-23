@@ -170,6 +170,10 @@ def analyse():
 
     return render_template('knot_invariants.html', **analysis[1])
 
+@app.route('/gausscode')
+def gausscode():
+    return render_template('gausscode.html')
+
 if __name__ == "__main__":
     #app.run()
     app.run(debug=True)
