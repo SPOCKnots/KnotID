@@ -166,7 +166,7 @@ def analyse():
 
     analysis = gauss_code_to_json(args['gausscode'].replace('b', '+'))
     if analysis[0]:
-        return analysis
+        return render_template('error.html', error=analysis[1])
 
     return render_template('knot_invariants.html', **analysis[1])
 

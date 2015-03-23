@@ -1,0 +1,13 @@
+
+{% if error %}
+<div class="centred">
+<div class="error_flash">{{ error }}</div>
+</div>
+{% endif %}
+
+{% if errors %}
+{% for error in errors %}
+<div class="error_flash">{{ error }}</div>
+{% endfor %}
+{% endif %}
+

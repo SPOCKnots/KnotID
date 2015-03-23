@@ -39,7 +39,7 @@ def gauss_code_to_json(gc):
     try:
         representation = Representation(str(gc))
     except:
-        return (True, 'FAIL: Gauss code could not be parsed')
+        return (True, 'Gauss code could not be parsed')
 
     return (False, representation_to_json(representation))
 
