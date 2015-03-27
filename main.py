@@ -1,6 +1,8 @@
 from __future__ import print_function
 from flask import (Flask, url_for, render_template, request, redirect,
                    flash)
+from logging import Formatter, INFO
+from logging.handlers import RotatingFileHandler
 from analysis import (text_to_json, torus_knot_to_json,
                       gauss_code_to_json)
 from fractions import gcd
@@ -47,10 +49,18 @@ app.config['MAX_CONTENT_LENGTH'] = 300 * 1024
 with open('secret_key.bin', 'rb') as fileh:
     app.secret_key = fileh.read()
 
+file_handler = RotatingFileHandler('logs/info.log', maxBytes=1e6,
+                                  backupCount=10)
+file_handler.setLevel(INFO)
+file_handler.setFormatter(Formatter(
+    '%(asctime)s %(levelname)s: %(message)s'
+))
+app.logger.addHandler(file_handler)
+
 
 @app.route('/')
 def main():
-    print('yay')
+    app.logger.info('Main accessed from {}!'.format(request.remote_addr))
     return render_template('index.html')
 
 
@@ -66,6 +76,25 @@ def upload():
     flash('invalid upload request')
     return upload_fail()
 
+def log_analysis(context, analysis):
+    num_crossings = str(analysis.get('num_crossings', '?'))
+    reduced_num_crossings = analysis.get('reduced_num_crossings', '?')
+    num_points = analysis.get('num_points', None)
+    roots = analysis.get('alex_roots', None)
+    cached = 'new'
+    if 'cached' in analysis:
+        cached = 'cached' if analysis['cached'] else 'new'
+    ip = request.remote_addr
+    app.logger.info('Received {}{}, GC length {}->{}, ({}){}, from {}'.format(
+        context,
+        ', {} points'.format(num_points) if num_points is not None else '',
+        num_crossings, reduced_num_crossings,
+        cached,
+        ', roots {}'.format(tuple(roots)) if roots is not None else '',
+        ip))
+
+def log_failure(context, message):
+    app.logger.info('Failed {}, from {}'.format(context, message))
 
 def upload_get():
     args = request.args
@@ -105,6 +134,8 @@ def upload_get():
         return upload_fail()
     tube_points = 600
 
+    log_analysis('UPLOAD-GET', extra_stuff)
+
     return render_template('upload.html',
                            parse_success=True,
                            line_points=array_json,
@@ -141,6 +172,8 @@ def upload_post():
 
     tube_points = 10*num_lines
 
+    log_analysis('UPLOAD-POST', extra_stuff)
+
     return render_template('upload.html', num_lines=num_lines,
                            parse_success=parse_success,
                            line_points=array_json,
@@ -172,8 +205,11 @@ def analyse():
         return 'FAIL: Gauss code not received'
 
     analysis = gauss_code_to_json(args['gausscode'].replace('b', '+'))
+
     if analysis[0]:
         return render_template('error.html', error=analysis[1])
+
+    log_analysis('GAUSSCODE', analysis[1])
 
     return render_template('knot_invariants.html', **analysis[1])
 
