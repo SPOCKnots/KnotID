@@ -29,6 +29,8 @@ def knot_to_json(k):
     max_extent = n.max(n.max(n.abs(k.points), axis=0))
 
     analysis = representation_to_json(k.representation())
+
+    analysis['num_points'] = len(k.points)
     
     return (json.dumps(k.points.tolist()), 2.5*max_extent, analysis)
 
@@ -141,6 +143,7 @@ def analysis_from_cache(cache, gauss_code, num_crossings):
     else:
         analysis['identification_perfect'] = False
             
+    analysis['cached'] = True
 
     return analysis
             
