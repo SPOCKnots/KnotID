@@ -1,14 +1,15 @@
 from __future__ import print_function
 from flask import (Flask, url_for, render_template, request, redirect,
-                   flash, Blueprint)
+                   flash)
 from analysis import (text_to_json, torus_knot_to_json,
                       gauss_code_to_json)
 from fractions import gcd
 
+
 class ReverseProxied(object):
-    '''Wrap the application in this middleware and configure the 
-    front-end server to add these headers, to let you quietly bind 
-    this to a URL other than / and to an HTTP scheme that is 
+    '''Wrap the application in this middleware and configure the
+    front-end server to add these headers, to let you quietly bind
+    this to a URL other than / and to an HTTP scheme that is
     different than what is used locally.
 
     In nginx:
@@ -46,10 +47,12 @@ app.config['MAX_CONTENT_LENGTH'] = 300 * 1024
 with open('secret_key.bin', 'rb') as fileh:
     app.secret_key = fileh.read()
 
+
 @app.route('/')
 def main():
     print('yay')
     return render_template('index.html')
+
 
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
@@ -63,11 +66,13 @@ def upload():
     flash('invalid upload request')
     return upload_fail()
 
+
 def upload_get():
     args = request.args
 
     if 'mode' not in args:
-        flash('No knot construction mode set (perhaps you entered the wrong URL)')
+        flash('No knot construction mode set (perhaps you entered the '
+              'wrong URL)')
         return upload_fail()
 
     if args['mode'] == 'torus':
@@ -100,7 +105,7 @@ def upload_get():
         return upload_fail()
     tube_points = 600
 
-    return render_template('upload.html', 
+    return render_template('upload.html',
                            parse_success=True,
                            line_points=array_json,
                            camera_extent=camera_extent,
@@ -110,6 +115,7 @@ def upload_get():
 
 def upload_fail():
     return redirect(url_for('main'))
+
 
 def upload_post():
     if 'pointstext' in request.form:
@@ -133,7 +139,6 @@ def upload_post():
         flash('Could not parse uploaded knot points')
         return upload_fail()
 
-
     tube_points = 10*num_lines
 
     return render_template('upload.html', num_lines=num_lines,
@@ -143,18 +148,22 @@ def upload_post():
                            tube_points=tube_points,
                            **extra_stuff)
 
+
 @app.errorhandler(413)
 def request_entity_too_large(error):
     flash('Uploaded file is too large, max size is 200kb')
     return upload_fail()
 
+
 @app.route('/about')
 def about():
     return render_template('about.html')
 
+
 @app.route('/draw')
 def draw():
     return render_template('draw.html')
+
 
 @app.route('/api/analyse')
 def analyse():
@@ -162,13 +171,12 @@ def analyse():
     if 'gausscode' not in args:
         return 'FAIL: Gauss code not received'
 
-    from pyknot2.representations import GaussCode
-
     analysis = gauss_code_to_json(args['gausscode'].replace('b', '+'))
     if analysis[0]:
         return render_template('error.html', error=analysis[1])
 
     return render_template('knot_invariants.html', **analysis[1])
+
 
 @app.route('/gausscode')
 def gausscode():
