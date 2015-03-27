@@ -56,6 +56,7 @@ file_handler.setFormatter(Formatter(
     '%(asctime)s %(levelname)s: %(message)s'
 ))
 app.logger.addHandler(file_handler)
+app.logger.setLevel(INFO)
 
 
 @app.route('/')
