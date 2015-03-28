@@ -14,7 +14,7 @@ Documentation - Knot ID
 <h2>Using the Knot ID tools</h2>
 
 <p>These tools are in early release, and it is possible that you will
-    encounter bugs. If you do, we'd love to <a ref="{{ url_for('about') }}#contactus">hear about it</a>.</p>
+    encounter bugs. If you do, we'd love to <a href="{{ url_for('about') }}#contactus">hear about it</a>.</p>
 
 You can upload a knot for analysis in several different ways:
 
@@ -60,32 +60,38 @@ You can upload a knot for analysis in several different ways:
 
 <h2>Technical details</h2>
 <p>
-    These tools run largely on Python and Cython. The web interface uses
-    Flask. Topological invariants are calculated using mainly our own
-    numerical implementations (intended to be referenced
-    somewhere). Cypari is used for symbolic calculation of the Alexander
-    polynomial, and Snappy for the hyperbolic volume. Three dimensional
-    visualisations use three.js, and the drawing interface uses two.js.
+    These tools run largely on Python and Cython, calculating
+    topological invariants largely through our own numerical
+    implementations but also calling external tools including SnapPy
+    for the hyperbolic volume and PARI/GP (via Cypari) for symbolic
+    matrix manipulation in the calculation of the Alexander
+    polynomial.
+</p>
+
+<p>
+    This web interface uses Flask. Three dimensional visualisations
+    are drawn using three.js, and the 2D drawing interface uses
+    two.js.
 </p>
 
 <h2>Other resources</h2>
 
 <ul class="inline" >
     <li><a class="header" href="http://katlas.org/wiki/Main_Page">The Knot Atlas</a>:
-    A large wiki of topological information, including explanations of
-    many of the concepts mentioned above and links to many further
-    resources.</li>
+        A large wiki of topological information, including explanations of
+        many of the concepts mentioned above and links to many further
+        resources.</li>
     <li>The <a class="header" href="http://www.indiana.edu/~knotinfo/">KnotInfo</a> and <a class="header" href="http://www.indiana.edu/~linkinfo/">LinkInfo</a> tables
-    of knot and link invariants: These catalogue many invariants and
-    other properties of knots and links within the known tabulations,
-    easily browsable via a web interface.</li>
+        of knot and link invariants: These catalogue many invariants and
+        other properties of knots and links within the known tabulations,
+        easily browsable via a web interface.</li>
     <li><a class="header" href="http://www.math.uic.edu/t3m/SnapPy/index.html">SnapPy</a>:
-    A program for studying the topology and geometry of
-    3-manifolds. Along with many other useful routines, SnapPy can
-    efficiently calculate the hyperbolic volume.
+        A program for studying the topology and geometry of
+        3-manifolds. Along with many other useful routines, SnapPy can
+        efficiently calculate the hyperbolic volume.</li>
 </ul>
 
 <script type="text/javascript"
-  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML">
+        src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML">
 </script>
 {% endblock %}
