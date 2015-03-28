@@ -1,0 +1,91 @@
+
+{% extends "body_center.html" %}
+
+{% block header_title %}
+: Documentation
+{% endblock %}
+
+{% block title %}
+Documentation - Knot ID
+{% endblock %}
+
+{% block body_centre %}
+
+<h2>Using the Knot ID tools</h2>
+
+<p>These tools are in early release, and it is possible that you will
+    encounter bugs. If you do, we'd love to <a ref="{{ url_for('about') }}#contactus">hear about it</a>.</p>
+
+You can upload a knot for analysis in several different ways:
+
+<ul class="inline">
+    <li>
+        <a class="header" href="{{ url_for('main') }}">Upload a space curve</a>: Load
+        a data file describing a line (or lines) in 3D space, and
+        receive information about whether it is knotted or linked.
+    </li>
+    <li>
+        <a class="header" href="{{ url_for('main') }}">View a torus knot</a>: The
+        torus knots are a special class of knots, those that can be
+        confined to the surface of a torus. Choose the two winding
+        numbers about the torus that describe such a knot to view the
+        result and its topological characteristics.
+    </li>
+    <li>
+        <a class="header" href="{{ url_for('draw') }}">Draw a knot diagram</a>:
+        Create the drawing in our online interface then upload to view
+        topological information about its shape.
+    </li>
+    <li>
+        <a class="header" href="{{ url_for('gausscode') }}">Upload a Gauss code</a>:
+        Provide this standard representation of the crossings in a
+        knot, and receive topological information about the object it
+        encodes.
+    </li>
+</ul>
+
+<h2>Topological glossary</h2>
+
+<h3>Gauss codes</h3>
+
+<h3>The Alexander Polynomial \(\Delta(t)\)</h3>
+
+<h3>The Determinant and \(|\Delta(\exp(2\pi i/n)|\)</h3>
+
+<h3>Vassiliev invariants</h3>
+
+<h3>The hyperbolic volume</h3>
+
+<h2>Knot and link identification</h2>
+
+<h2>Technical details</h2>
+<p>
+    These tools run largely on Python and Cython. The web interface uses
+    Flask. Topological invariants are calculated using mainly our own
+    numerical implementations (intended to be referenced
+    somewhere). Cypari is used for symbolic calculation of the Alexander
+    polynomial, and Snappy for the hyperbolic volume. Three dimensional
+    visualisations use three.js, and the drawing interface uses two.js.
+</p>
+
+<h2>Other resources</h2>
+
+<ul class="inline" >
+    <li><a class="header" href="http://katlas.org/wiki/Main_Page">The Knot Atlas</a>:
+    A large wiki of topological information, including explanations of
+    many of the concepts mentioned above and links to many further
+    resources.</li>
+    <li>The <a class="header" href="http://www.indiana.edu/~knotinfo/">KnotInfo</a> and <a class="header" href="http://www.indiana.edu/~linkinfo/">LinkInfo</a> tables
+    of knot and link invariants: These catalogue many invariants and
+    other properties of knots and links within the known tabulations,
+    easily browsable via a web interface.</li>
+    <li><a class="header" href="http://www.math.uic.edu/t3m/SnapPy/index.html">SnapPy</a>:
+    A program for studying the topology and geometry of
+    3-manifolds. Along with many other useful routines, SnapPy can
+    efficiently calculate the hyperbolic volume.
+</ul>
+
+<script type="text/javascript"
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML">
+</script>
+{% endblock %}
