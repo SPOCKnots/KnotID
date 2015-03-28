@@ -6,7 +6,7 @@
         <link href="static/style.css" rel="stylesheet" type="text/css">
         <title>
         {% block title %}
-        Knot identifier
+        Knot ID
         {% endblock %}
         </title>
     </head>
@@ -14,7 +14,7 @@
     <body>
         
         <h1 id="header_title">
-            <a href="{{ url_for('main') }}">Knot identifier</a>{% block header_title %}{% endblock %}
+            <a href="{{ url_for('main') }}">Knot ID</a>{% block header_title %}{% endblock %}
         </h1>
         
         {% block menu %}
@@ -24,6 +24,7 @@
                 <li><a href="{{ url_for('main') }}">Spacecurve</a></li>
                 <li><a href="{{ url_for('draw') }}">Draw</a></li>
                 <li><a href="{{ url_for('gausscode') }}">Gauss code</a></li>
+                <li><a href="{{ url_for('documentation') }}">Documentation</a></li>
                 <li><a href="{{ url_for('about') }}">About</a></li>
             </ul>
         </div>

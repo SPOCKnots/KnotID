@@ -193,6 +193,9 @@ def request_entity_too_large(error):
 def about():
     return render_template('about.html')
 
+@app.route('/documentation')
+def documentation():
+    return render_template('documentation.html')
 
 @app.route('/draw')
 def draw():
