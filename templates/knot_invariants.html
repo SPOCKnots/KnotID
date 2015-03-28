@@ -27,14 +27,14 @@ maintainer.</p>
 <table class="invariants">
     <tr><th>Quantity</th><th>Value</th></tr>
     
-    {% if num_crossings %}
+    {% if num_crossings is defined %}
     <tr>
         <td class="fact">Initial crossing number</td>
         <td class="fact">{{ num_crossings }}</td>
     </tr>
     {% endif %}
 
-    {% if reduced_num_crossings %}
+    {% if reduced_num_crossings is defined %}
     <tr>
         <td class="fact">Reduced crossing number</td>
         <td class="fact">{{ reduced_num_crossings }}</td>
