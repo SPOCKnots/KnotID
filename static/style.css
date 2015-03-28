@@ -315,3 +315,15 @@ input[type=checkbox], input[type=radio] {
 .invariants td + td {
     width: 50%;
 }
+
+ul.inline {
+}
+
+ul.inline li {
+    padding-top: 2px;
+    padding-bottom: 3px;
+}
+
+a.header {
+    font-weight: bold;
+}
