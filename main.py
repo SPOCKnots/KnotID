@@ -188,6 +188,23 @@ def request_entity_too_large(error):
     flash('Uploaded file is too large, max size is 200kb')
     return upload_fail()
 
+@app.errorhandler(500)
+def error(error):
+    flash('test')
+    # flash('Error 500 (internal server error): If the problem '
+    #       'persists, please contact <a href="mailto:alexander.'
+    #       'taylor@bristol.ac.uk">alexander.taylor@bristol.ac.uk'
+    #       '</a>.')
+    return redirect(url_for('main'))
+
+@app.errorhandler(404)
+def notfound(error):
+    flash('Error 404 (page not found)')
+    return redirect(url_for('main'))
+
+@app.route('/raiseerror')
+def raise500():
+    raise Exception('test error')
 
 @app.route('/about')
 def about():
