@@ -98,7 +98,7 @@ def representation_to_json(rep):
                 'vassiliev_degree_2': rep.vassiliev_degree_2(False),
                 }
 
-    if len(rep) < 10:
+    if len(rep) < 20:
         analysis['vassiliev_degree_3'] = rep.vassiliev_degree_3(False)
 
     # try:
