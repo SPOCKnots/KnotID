@@ -27,6 +27,13 @@ maintainer.</p>
 <table class="invariants">
     <tr><th>Quantity</th><th>Value</th></tr>
     
+    {% if num_points is defined %}
+    <tr>
+        <td class="fact">Number of vertices</td>
+        <td class="fact">{{ num_points }}</td>
+    </tr>
+    {% endif %}
+    
     {% if num_crossings is defined %}
     <tr>
         <td class="fact">Initial crossing number</td>
