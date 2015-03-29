@@ -50,7 +50,8 @@ div.scroll {
     overflow: auto;
     border: 1px solid #666;
     background-color: #eee;
-    padding: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
 }
 
 #plot_container {
