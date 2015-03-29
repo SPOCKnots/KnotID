@@ -35,111 +35,16 @@ topological notation. See the <a href="{{ url_for('about') }}">About</a> and <a 
 <p>p and q must (for now) be coprime; this guarantees that the
     result is a single-component knot.</p>
 
-<form action="{{ url_for('upload') }}" method="GET">
-    <input type="hidden" name="mode" value="torus">
-    p = <input type="text" name="p" oninput="checkGCD()" id="p_text" autocomplete="off" size="5">
-    <br>
-    q = <input type="text" name="q" oninput="checkGCD()" id="q_text" autocomplete="off" size="5">
-    <br><br>
-    <input type="submit" value="Upload" id="pq_button"> <div id="pq_check"></div>
-</form>
-
-<script>
- function gcd(a,b) {
-     if (a < 0) a = -a;
-     if (b < 0) b = -b;
-     if (b > a) {var temp = a; a = b; b = temp;}
-     while (true) {
-         a %= b;
-         if (a == 0) return b;
-         b %= a;
-         if (b == 0) return a;
-     }
- }
-
- function checkGCD() {
-     var p = parseInt( document.getElementById( 'p_text' ).value );
-     var q = parseInt( document.getElementById( 'q_text' ).value );
-     
-     var correctText = document.getElementById( 'pq_check' );
-     var button = document.getElementById( 'pq_button' );
-     
-     if ( !isNaN( p ) && !isNaN( q ) && 
-         p > 0 && q > 0 &&
-         gcd( p, q ) === 1 ) {
-             correctText.className = 'enabled_notice';
-             correctText.innerHTML = 'p and q are coprime and valid';
-             button.disabled = false;
-     } else {
-         var correctText = document.getElementById( 'pq_check' );
-         correctText.className = 'disabled_notice';
-         correctText.innerHTML = 'p and q must be coprime and positive';
-         button.disabled = true;
-     }
- }
- 
- checkGCD()
-</script>
-
+{% include 'upload_torus_knot.html' %}
 
 <h3>Upload from file</h3>
-<form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
-    <input type="file" name="pointsfile" size="40" onchange="checkFile()" id="file_selector">
-    <br><br>
-    <input type="submit" value="Upload" id="file_button"> <div id="file_check"></div>
-</form>
 
-<script>
- function checkFile() {
-     var fileElement = document.getElementById( 'file_selector' );
-     var fileCheckText = document.getElementById( 'file_check' );
-     var button = document.getElementById( 'file_button' );
-
-     if ( fileElement.value != "" ) {
-         fileCheckText.className = 'enabled_notice';
-         fileCheckText.innerHTML = 'File selected';
-         button.disabled = false;
-     } else {
-         fileCheckText.className = 'disabled_notice';
-         fileCheckText.innerHTML = 'No file selected';
-         button.disabled = true;
-     }
- }
- 
- checkFile()
-</script>
+{% include 'upload_from_file.html' %}
 
 <h3>Enter a Gauss code</h3>
 
-
-
 <h3>Upload from paste</h3>
-<form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
-    <textarea name="pointstext" rows="3" cols="80" oninput="checkPaste()" id="paste_box"></textarea>
-    <br><br>
-    <input type="submit" value="Upload" id="paste_button"> <div id="paste_check"></div>
-</form>
 
-<script>
- function checkPaste() {
-     var pasteElement = document.getElementById( 'paste_box' );
-     var pasteCheckText = document.getElementById( 'paste_check' );
-     var button = document.getElementById( 'paste_button' );
-     
-     console.log( pasteElement.value );
-     
-     if ( pasteElement.value != "") {
-         pasteCheckText.className = 'enabled_notice';
-         pasteCheckText.innerHTML = 'Paste box contains text';
-         button.disabled = false;
-     } else {
-         pasteCheckText.className = 'disabled_notice';
-         pasteCheckText.innerHTML = 'Paste box is empty';
-         button.disabled = true;
-     }
- }
- 
- checkPaste();
-</script>
+{% include 'upload_from_paste.html' %}
 
 {% endblock %}

@@ -1,0 +1,26 @@
+
+<form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+    <input type="file" name="pointsfile" size="40" onchange="checkFile()" id="file_selector">
+    <br><br>
+    <input type="submit" value="Upload" id="file_button"> <div id="file_check"></div>
+</form>
+
+<script>
+ function checkFile() {
+     var fileElement = document.getElementById( 'file_selector' );
+     var fileCheckText = document.getElementById( 'file_check' );
+     var button = document.getElementById( 'file_button' );
+
+     if ( fileElement.value != "" ) {
+         fileCheckText.className = 'enabled_notice';
+         fileCheckText.innerHTML = 'File selected';
+         button.disabled = false;
+     } else {
+         fileCheckText.className = 'disabled_notice';
+         fileCheckText.innerHTML = 'No file selected';
+         button.disabled = true;
+     }
+ }
+ 
+ checkFile()
+</script>

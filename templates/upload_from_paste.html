@@ -1,0 +1,28 @@
+
+<form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+    <textarea name="pointstext" rows="3" cols="80" oninput="checkPaste()" id="paste_box"></textarea>
+    <br><br>
+    <input type="submit" value="Upload" id="paste_button"> <div id="paste_check"></div>
+</form>
+
+<script>
+ function checkPaste() {
+     var pasteElement = document.getElementById( 'paste_box' );
+     var pasteCheckText = document.getElementById( 'paste_check' );
+     var button = document.getElementById( 'paste_button' );
+     
+     console.log( pasteElement.value );
+     
+     if ( pasteElement.value != "") {
+         pasteCheckText.className = 'enabled_notice';
+         pasteCheckText.innerHTML = 'Paste box contains text';
+         button.disabled = false;
+     } else {
+         pasteCheckText.className = 'disabled_notice';
+         pasteCheckText.innerHTML = 'Paste box is empty';
+         button.disabled = true;
+     }
+ }
+ 
+ checkPaste();
+</script>
