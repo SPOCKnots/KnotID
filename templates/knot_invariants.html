@@ -104,6 +104,7 @@ maintainer.</p>
     {% endif %}
     
     {% if identification is defined %}
+    {% if identification %}
     <tr>
         {% if identification_perfect %}
         <td class="identification">Unambiguous identification</td>
@@ -120,6 +121,7 @@ maintainer.</p>
         <td class="identification">No matching prime knots with fewer than 15 crossings.</td>
     {% endif %}
     </tr>
+    {% endif %}
 </table>
 
 
