@@ -108,15 +108,15 @@ def representation_to_json(rep):
          identifier_to_latex(knot.identifier)) for knot in rep.identify()]
     identification_perfect = len(rep) < 14
     
-    analysis = {'identification': identification,
-                'identification_perfect': identification_perfect,
-                'reduced_num_crossings': simplified_gc_length,
-                'simplified_gauss_code': simplified_gc_string,
-                'alex_roots': rep.alexander_at_root((2, 3, 4),
-                                                    force_no_simplify=True),
+    analysis.update({'identification': identification,
+                     'identification_perfect': identification_perfect,
+                     'reduced_num_crossings': simplified_gc_length,
+                     'simplified_gauss_code': simplified_gc_string,
+                     'alex_roots': rep.alexander_at_root((2, 3, 4),
+                                                         force_no_simplify=True),
                    # 'hyp_vol': str(k.hyperbolic_volume()),
-                'vassiliev_degree_2': rep.vassiliev_degree_2(False),
-                }
+                     'vassiliev_degree_2': rep.vassiliev_degree_2(False),
+                     })
 
     if len(rep) < 20:
         analysis['vassiliev_degree_3'] = rep.vassiliev_degree_3(False)
