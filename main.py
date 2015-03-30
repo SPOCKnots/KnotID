@@ -168,6 +168,10 @@ def upload_post():
         lines = text.split('\n')
 
     num_lines = len(lines)
+    if num_lines > 3000:
+        flash('Too many vertices in uploaded curve. Current maximum is '
+              '3000, received {}'.format(num_lines))
+        return upload_fail()
 
     parse_success = False
 

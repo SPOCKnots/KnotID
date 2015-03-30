@@ -10,6 +10,8 @@
 
 <br>
 
+{% include 'error.html' %}
+
 {% if is_virtual %}
 
 <p>The uploaded Gauss code appears to describe a virtual knot, i.e. a
@@ -101,7 +103,7 @@ maintainer.</p>
     </tr>
     {% endif %}
     
-    {% if identification %}
+    {% if identification is defined %}
     <tr>
         {% if identification_perfect %}
         <td class="identification">Unambiguous identification</td>

@@ -31,7 +31,7 @@ def knot_to_json(k):
     analysis = representation_to_json(k.representation())
 
     analysis['num_points'] = len(k.points)
-    
+
     return (json.dumps(k.points.tolist()), 2.5*max_extent, analysis)
 
 
@@ -64,9 +64,20 @@ def cached_from_gauss_code(gc):
 
 def representation_to_json(rep):
     gc_string = str(rep)
+    gc_length = len(rep)
+
+    analysis = {'gauss_code': gc_string,
+                'num_crossings': gc_length}
+
+    if gc_length > 5000:
+        analysis['error'] = ('Gauss code initial length too long for'
+                             'further analysis. Found '
+                             '{} crossings, max is {}'.format(
+                                 gc_length, 5000))
+        return analysis
+    
     is_virtual = rep.is_virtual()
     self_linking = rep.self_linking()
-    gc_length = len(rep)
 
     if is_virtual:
         return {'is_virtual': is_virtual,
@@ -74,6 +85,17 @@ def representation_to_json(rep):
     rep.simplify()
     simplified_gc_string = str(rep)
     simplified_gc_length = len(rep)
+
+    analysis['simplified_gauss_code'] = simplified_gc_string
+    analysis['reduced_num_crossings'] = simplified_gc_length
+
+    if simplified_gc_length > 3000:
+        analysis['error'] = ('Gauss code reduced length is too large. '
+                             'Reduced to {} crossings, but max for further '
+                             'analysis is {}'.format(simplified_gc_length))
+        return analysis
+                             
+
 
     from pyknot2.catalogue.database import Knot
     cached = cached_from_gauss_code(simplified_gc_string)
@@ -88,8 +110,6 @@ def representation_to_json(rep):
     
     analysis = {'identification': identification,
                 'identification_perfect': identification_perfect,
-                'gauss_code': gc_string,
-                'num_crossings': gc_length,
                 'reduced_num_crossings': simplified_gc_length,
                 'simplified_gauss_code': simplified_gc_string,
                 'alex_roots': rep.alexander_at_root((2, 3, 4),
