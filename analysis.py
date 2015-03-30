@@ -37,7 +37,6 @@ def knot_to_json(k):
 
 def gauss_code_to_json(gc):
     from pyknot2.representations.representation import Representation
-    print('trying to parse', gc, len(gc))
     try:
         representation = Representation(str(gc))
     except:
@@ -56,7 +55,6 @@ def cached_from_gauss_code(gc):
     if first is not None:
         first.num_times_accessed = first.num_times_accessed + 1
         first.save()
-        print('gc accessed {} times'.format(first.num_times_accessed))
     db.close()
 
     return first
@@ -100,7 +98,6 @@ def representation_to_json(rep):
     from pyknot2.catalogue.database import Knot
     cached = cached_from_gauss_code(simplified_gc_string)
     if cached is not None:
-        print('gc was cached!')
         return analysis_from_cache(cached, gc_string, gc_length)
 
     identification = [
@@ -131,8 +128,6 @@ def representation_to_json(rep):
     # except ValueError, RuntimeError:
     #     print('ValueError in alexander calculation, only a problem '
     #           'if running in debug mode.')
-
-    print('analysis is', analysis)
 
     cache_from_analysis(analysis)
 
