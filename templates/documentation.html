@@ -46,29 +46,94 @@ You can upload a knot for analysis in several different ways:
 
 <h2>Identifying knots and links</h2>
 
-These tools identify knots and links through the calculation of <emph>topological
-invariants</emph>. These are functions of the curve(s) that do not
-vary if they are distorted, unless one strand of the knot is cut or
-otherwise passes through another such that the knot type does
-change. In fact, the full three dimensional shape of the knot is not
-important and all the information needed to calculate such invariants
-is contained in the list of self intersections of a two-dimensional
-projection of the curve. This information can be written in many
-different ways, of which one simple example is the Gauss code as used by most of
-the tools on this site.
+<p>
+    These tools identify knots and links through the calculation of <emph>topological
+    invariants</emph>. These are functions of the curve(s) that do not
+    vary if they are distorted, unless one strand of the knot is cut or
+    otherwise passes through another such that the knot type does
+    change. In fact, the full three dimensional shape of the knot is not
+    important and all the information needed to calculate such invariants
+    is contained in the list of self intersections of a two-dimensional
+    projection of the curve. This information can be written in many
+    different ways, of which one simple example is the <a href="http://katlas.org/wiki/Gauss_Codes">Gauss code</a> as used
+    by most of the tools on this site.
+</p>
 
+<p>
+    The invariants calculated are explained briefly in the following
+    sections, and then their values used to look up matching knots, those
+    with the same values for each invariant. This lookup currently only
+    searches for prime knots, using the Alexander polynomial evaluated at
+    -1, \(\exp(2\pi i/3)\) and i, along with the number of
+    crossings in the uploaded representation after performing basic
+    topology-preserving simplification (via the first two <a href="http://en.wikipedia.org/wiki/Reidemeister_move">Reidemeister moves</a>).
+    We intend to also compare other, more powerful invariants in the
+    future.  Our lookup table is based on the <a href="http://katlas.org/wiki/Main_Page">Knot Atlas</a> Take
+    Home Database, and includes knots with up to 15 crossings.
+</p>
 
-<h2>Gauss codes</h2>
+<p>Resulting knot identifications are labelled as 'unambigous' if the
+    number of crossings is less than 14, or incomplete otherwise. In both
+    cases, more than one match may be returned, which cannot be
+    distinguished using the invariants of the lookup. Note that in neither
+    case are <a href="http://en.wikipedia.org/wiki/Prime_knot">composite knots</a> considered; the analysed knot may in fact be
+    composite even if the result is labelled unambiguous.
+</p>
 
 <h2>Topological invariants</h2>
 
 <h3>The Alexander Polynomial \(\Delta(t)\)</h3>
 
+<p>
+    An invariant that associates a polynomial with each knot. Some knots
+    have the same value of this polynomial even at relatively low crossing
+    numbers, so the Alexander polynomial is far from a perfect knot
+    discriminator, but it is easily calculable in \(O(n^2)\) for n
+    crossings and so is very convenient; most polynomial invariants scale
+    much less well.
+</p>
+
+<p>
+    We calculate the Alexander polynomial via a standard matrix
+    determinant algorithm, as described in e.g. <a href="http://journals.aps.org/rmp/abstract/10.1103/RevModPhys.79.611">here</a>.
+</p>
+
 <h3>The Determinant and \(|\Delta(\exp(2\pi i/n)|\)</h3>
+
+<p>
+    The determinant invariant is the Alexander polynomial evaluated at
+    -1. We also use the evaluations at \(\Delta(\exp(2\pi i/3)\) and i,
+    which have the convenient property of being guaranteed to be integers
+    (higher order roots of unity generally do not). These are all much
+    easier to calculate than the full symbolic Alexander polynomial, as
+    numerically finding the determinant of a real or complex matrix is
+    much easier than for a symbolic matrix, but for simple knots the
+    results are almost as discriminating at the full Alexander polynomial.
+</p>
 
 <h3>Vassiliev invariants</h3>
 
+<p>
+    The Vassiliev invariants form an infinite family that together are
+    strictly more powerful than the Alexander polynomial (and other common
+    polynomial invariants), with the advantage that they can be calculated
+    in polynomial time (although higher orders are still impractical). The
+    Vassiliev invariants of order 2 and 3 are included in the results from
+    these tools, though the latter only when there are fewer than 20
+    crossings in the knot projection used. 
+</p>
+
+<p>
+    We calculate these invariants via the Gauss diagram algorithm of <a href="http://imrn.oxfordjournals.org/content/1994/11/445.citation">Polyak
+    and Viro</a>, <emph>Internat Math Res Notices</emph> <b>1994</b>,
+    445-453 (1994).
+</p>
+
 <h3>The hyperbolic volume</h3>
+
+<p>
+    This is the volume of the complement of the knot or the link with
+    respect to its hyperbolic metric (if it admits one).
 
 <h3>Other invariants</h3>
 
