@@ -90,6 +90,8 @@ def log_analysis(context, analysis):
     cached = 'new'
     if 'cached' in analysis:
         cached = 'cached' if analysis['cached'] else 'new'
+        if 'num_times_accessed' in analysis:
+            cached += ' {}'.format(analysis['num_times_accessed'])
     ip = get_ip()
     app.logger.info('Received {}{}, GC length {}->{}, ({}){}, from {}'.format(
         context,

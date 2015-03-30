@@ -142,8 +142,10 @@ def analysis_from_cache(cache, gauss_code, num_crossings):
         analysis['identification_perfect'] = cache.identification_perfect
     else:
         analysis['identification_perfect'] = False
+
             
     analysis['cached'] = True
+    analysis['num_times_accessed'] = cache.num_times_accessed
 
     return analysis
             
