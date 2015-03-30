@@ -76,6 +76,12 @@ def upload():
     flash('invalid upload request')
     return upload_fail()
 
+def get_ip():
+    if len(request.access_route) > 1:
+        return request.access_route[-1]
+    else:
+        return request.access_route[0]
+
 def log_analysis(context, analysis):
     num_crossings = str(analysis.get('num_crossings', '?'))
     reduced_num_crossings = analysis.get('reduced_num_crossings', '?')
@@ -84,7 +90,7 @@ def log_analysis(context, analysis):
     cached = 'new'
     if 'cached' in analysis:
         cached = 'cached' if analysis['cached'] else 'new'
-    ip = request.remote_addr
+    ip = get_ip()
     app.logger.info('Received {}{}, GC length {}->{}, ({}){}, from {}'.format(
         context,
         ', {} points'.format(num_points) if num_points is not None else '',
