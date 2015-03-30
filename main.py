@@ -61,7 +61,6 @@ app.logger.setLevel(INFO)
 
 @app.route('/')
 def main():
-    app.logger.info('Main accessed from {}!'.format(request.remote_addr))
     return render_template('index.html')
 
 
