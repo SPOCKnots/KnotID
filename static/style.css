@@ -328,3 +328,9 @@ ul.inline li {
 a.header {
     font-weight: bold;
 }
+
+#header_title em {
+    color: red;
+    font-style: normal;
+
+}
