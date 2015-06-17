@@ -39,6 +39,22 @@ topological notation. See the <a href="{{ url_for('about') }}">About</a> and <a 
 
 <h3>Upload from file</h3>
 
+<p>The format should be three values (x, y, z) per line. For instance, the
+following would describe a trefoil knot. You can also download this example <a href="static/trefoil_example.txt">as a file</a>.</p>
+
+<pre>
+9.0 0.0 0.0
+0.781 4.43 2.6
+-4.23 1.54 -2.6
+-4.5 -7.79 -7.35e-16
+3.45 -2.89 2.6
+3.45 2.89 -2.6
+-4.5 7.79 0.0
+-4.23 -1.54 2.6
+0.781 -4.43 -2.6
+</pre>
+
+
 {% include 'upload_from_file.html' %}
 
 <h3>Enter a Gauss code</h3>
@@ -47,6 +63,10 @@ topological notation. See the <a href="{{ url_for('about') }}">About</a> and <a 
     upload via this standard topological notation.</p>
 
 <h3>Upload from paste</h3>
+
+<p>The format should be three value (x, y, z) perline, as described in
+the 'Upload from file' section above. You can copy the given example
+here to see the knot.<p>
 
 {% include 'upload_from_paste.html' %}
 
