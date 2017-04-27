@@ -54,6 +54,8 @@ def dt_code_to_json(dt):
         dt = DTNotation(str(dt))
         representation = dt.representation()
     except:
+        import traceback
+        traceback.print_exc()
         return (True, 'Something went wrong during parsing or analysis.')
 
     return (False, representation_to_json(representation))
