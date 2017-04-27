@@ -4,7 +4,7 @@ from flask import (Flask, url_for, render_template, request, redirect,
 from logging import Formatter, INFO
 from logging.handlers import RotatingFileHandler
 from analysis import (text_to_json, torus_knot_to_json,
-                      gauss_code_to_json)
+                      gauss_code_to_json, dt_code_to_json)
 from fractions import gcd
 
 
@@ -229,14 +229,20 @@ def documentation():
 def draw():
     return render_template('draw.html')
 
+# @app.route('/secret_dt_upload')
+# def secret_dt_upload():
+#     return render_template('secret_dt_upload.html')
 
 @app.route('/api/analyse')
 def analyse():
     args = request.args
-    if 'gausscode' not in args:
-        return 'FAIL: Gauss code not received'
+    if 'gausscode' not in args and 'dtcode' not in args:
+        return 'FAIL: No DT code or Gauss code received'
 
-    analysis = gauss_code_to_json(args['gausscode'].replace('b', '+'))
+    if 'gausscode' in args:
+        analysis = gauss_code_to_json(args['gausscode'].replace('b', '+'))
+    else:  # 'dtcode' is in args
+        analysis = dt_code_to_json(args['dtcode'].replace('b', ' '))
 
     if analysis[0]:
         return render_template('error.html', error=analysis[1])
@@ -249,6 +255,10 @@ def analyse():
 @app.route('/gausscode')
 def gausscode():
     return render_template('gausscode.html')
+
+@app.route('/dowker')
+def dowker():
+    return render_template('dowker.html')
 
 if __name__ == "__main__":
     #app.run()

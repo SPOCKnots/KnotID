@@ -37,10 +37,24 @@ def knot_to_json(k):
 
 def gauss_code_to_json(gc):
     from pyknot2.representations.representation import Representation
+    if len(gc) > 5000:
+        return(True, 'Gauss code too long')
     try:
         representation = Representation(str(gc))
     except:
         return (True, 'Gauss code could not be parsed')
+
+    return (False, representation_to_json(representation))
+
+def dt_code_to_json(dt):
+    from pyknot2.representations.dtnotation import DTNotation
+    if len(dt) > 2000:
+        return(True, 'DT code too long')
+    try:
+        dt = DTNotation(str(dt))
+        representation = dt.representation()
+    except:
+        return (True, 'Something went wrong during parsing or analysis.')
 
     return (False, representation_to_json(representation))
 
