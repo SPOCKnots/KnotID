@@ -151,7 +151,7 @@ LineVertex.prototype = {
         // this.circle.translation.set(pos.x - 0.5*this.radius, 
         //                             pos.y - 0.5*this.radius);
         this.circle.translation.set(pos.x,
-                                    pos.y)
+                                    pos.y);
         this.line.translation.set(pos.x, pos.y);
         
         var diff = new Two.Vector().sub(this.line.vertices[1], this.line.vertices[0]);
@@ -178,6 +178,11 @@ LineVertex.prototype = {
             this.line.vertices[1].x = 0;
             this.line.vertices[1].y = 0;
         }
+    },
+
+    undraw: function() {
+        two.remove(this.line);
+        two.remove(this.circle);
     }
 }
 
@@ -510,6 +515,24 @@ function changeClosure() {
     
     recheckAllCrossings();
     getGaussCode();
+}
+
+function clearDrawing() {
+    // two.remove(crossings);
+    // two.clear();
+    for (var i=0; i < crossings.length; i++) {
+        var crossing = crossings[i];
+        crossing.undraw();
+    }
+
+    for (var i=0; i < vertices.length; i++) {
+        var vertex = vertices[i];
+        vertex.undraw();
+    }
+    crossings = [];
+    vertices = [];
+    getGaussCode();
+    two.update()
 }
 
 elem.addEventListener('mousedown', handleTouchDown);
