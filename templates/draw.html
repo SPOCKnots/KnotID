@@ -15,9 +15,11 @@ Draw - Knot ID
     <div id="plot_container">
         <form action="" id="draw_form">
             <div id="form_container">
-                include closure <input type="checkbox"  name="include_closure" value="include_closure" onChange="changeClosure()" id="closure_checkbox">
+                <label for="closure_checkbox" >include closure</label>
+                <input type="checkbox"  name="include_closure" value="include_closure" onChange="changeClosure()" id="closure_checkbox">
                 <br>
-                translucent crossings <input type="checkbox"  name="translucency" value="translucency" onChange="changeTranslucency()" id="translucency_checkbox">
+                <label for="translucency_checkbox" >translucent crossings</label>
+                <input type="checkbox"  name="translucency" value="translucency" onChange="changeTranslucency()" id="translucency_checkbox">
                 <br>
         <button type="button" onclick="clearDrawing()">
             clear drawing
