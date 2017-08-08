@@ -1,9 +1,11 @@
 
 <form action="{{ url_for('upload') }}" method="GET">
     <input type="hidden" name="mode" value="torus">
-    p = <input type="text" name="p" oninput="checkGCD()" id="p_text" autocomplete="off" size="5">
+    <label for="p_text" >p =</label>
+    <input type="text" name="p" oninput="checkGCD()" id="p_text" autocomplete="off" size="5">
     <br>
-    q = <input type="text" name="q" oninput="checkGCD()" id="q_text" autocomplete="off" size="5">
+    <label for="q_text" >q =</label>
+    <input type="text" name="q" oninput="checkGCD()" id="q_text" autocomplete="off" size="5">
     <br><br>
     <input type="submit" value="Upload" id="pq_button"> <div id="pq_check"></div>
 </form>

@@ -1,6 +1,6 @@
 
 <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
-    <textarea name="pointstext" rows="3" cols="80" oninput="checkPaste()" id="paste_box"></textarea>
+    <textarea name="pointstext" rows="3" cols="80" oninput="checkPaste()" id="paste_box" title="paste curve points"></textarea>
     <br><br>
     <input type="submit" value="Upload" id="paste_button"> <div id="paste_check"></div>
 </form>
