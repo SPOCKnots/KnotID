@@ -58,7 +58,6 @@ div.scroll {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    background-color: green;
 }
 
 #plot_container {
@@ -66,7 +65,6 @@ div.scroll {
     margin: 5px;
     margin-left: auto;
     margin-right: auto;
-    background-color: yellow;
     flex-basis: auto;
 }
 
@@ -83,7 +81,6 @@ div.scroll {
     }
     #results_container {
         width: 100%;
-        background-color: pink;
     }
 }
 
