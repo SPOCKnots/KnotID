@@ -9,5 +9,7 @@ Knot ID is developed as part of the [Scientific Properties of Complex Knots (SPO
 
 ## Technical details
 
-Knot ID is written in Python using the Flask framework. Topological analysis use the pyknot2 library.
+Knot ID is written in Python using the Flask framework. Topological
+analysis is carried out using the pyknot2 Python library, also
+developed under the SPOCK Programme Grant.
 
