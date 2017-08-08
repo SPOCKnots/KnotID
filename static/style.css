@@ -54,18 +54,37 @@ div.scroll {
     padding-right: 8px;
 }
 
+#draw_container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    background-color: green;
+}
+
 #plot_container {
-    /* display: inline-block; */
-    float: left;
     width: 50%;
     margin: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: yellow;
+    flex-basis: auto;
 }
 
 #results_container {
-    /* display: inline-block; */
-    float: left;
     width: 45%;
-    margin: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    flex-basis: auto;
+}
+
+@media screen and (max-width:800px) {
+    #plot_container {
+        width: 100%;
+    }
+    #results_container {
+        width: 100%;
+        background-color: pink;
+    }
 }
 
 #instructions {
