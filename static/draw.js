@@ -4,6 +4,8 @@ var two = new Two({ type: Two.Types.svg, width: winSize, height: winSize - 50}).
 
 two.update();
 
+var bottomGroup = two.makeGroup();
+var topGroup = two.makeGroup();
 
 var vertices = [];
 var crossings = [];
@@ -48,6 +50,9 @@ Crossing = function(pos, angle1, angle2, index1, index2, clockwise, radius) {
     this.line.noFill();
     this.line.stroke = 'blue';
     this.line.linewidth = 3;
+
+    topGroup.add(this.circle);
+    topGroup.add(this.line);
 }
 
 Crossing.prototype = {
@@ -82,8 +87,8 @@ Crossing.prototype = {
         }
     },
     undraw: function() {
-        two.remove(this.circle);
-        two.remove(this.line);
+        topGroup.remove(this.circle);
+        topGroup.remove(this.line);
     }
   
 }
@@ -135,11 +140,13 @@ LineVertex = function(pos, radius) {
     this.circle.stroke = 'darkred';
     this.circle.linewidth = 3;
     this.circle.opacity=0.2;
+    bottomGroup.add(this.circle)
     
     this.line = two.makePolygon(pos.x, pos.y, pos.x, pos.y, true);
     this.line.noFill();
     this.line.stroke = 'blue';
     this.line.linewidth = 3;
+    bottomGroup.add(this.line)
     
     this.setPos(this.pos);
 }
@@ -181,8 +188,8 @@ LineVertex.prototype = {
     },
 
     undraw: function() {
-        two.remove(this.line);
-        two.remove(this.circle);
+        bottomGroup.remove(this.line);
+        bottomGroup.remove(this.circle);
     }
 }
 
