@@ -1,6 +1,6 @@
 
 <form action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
-    <input type="file" name="pointsfile" size="40" onchange="checkFile()" id="file_selector" title="upload file of curve points">
+    <input type="file" name="pointsfile" onchange="checkFile()" id="file_selector" title="upload file of curve points">
     <br><br>
     <input type="submit" value="Upload" id="file_button"> <div id="file_check"></div>
 </form>
