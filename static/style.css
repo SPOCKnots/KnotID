@@ -52,6 +52,8 @@ div.scroll {
     background-color: #eee;
     padding-left: 8px;
     padding-right: 8px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 #analysis_container {
