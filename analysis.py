@@ -42,9 +42,18 @@ def gauss_code_to_json(gc):
     try:
         representation = Representation(str(gc))
     except:
+        import traceback
+        traceback.print_exc()
         return (True, 'Gauss code could not be parsed')
 
-    return (False, representation_to_json(representation))
+    try:
+        result = representation_to_json(representation)
+    except:
+        import traceback
+        traceback.print_exc()
+        return (True, 'Something went wrong during parsing or analysis')
+
+    return (False, result)
 
 def dt_code_to_json(dt):
     from pyknot2.representations.dtnotation import DTNotation
@@ -56,7 +65,7 @@ def dt_code_to_json(dt):
     except:
         import traceback
         traceback.print_exc()
-        return (True, 'Something went wrong during parsing or analysis.')
+        return (True, 'Something went wrong during parsing or analysis')
 
     return (False, representation_to_json(representation))
 
