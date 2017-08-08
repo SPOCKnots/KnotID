@@ -10,9 +10,20 @@ Gauss code analysis - Knot ID
 
 {% block body_centre %}
 
-<p>Enter a Gauss code below. Currently this must be sets of a number,
-+/- and a/c, separated by a comma, e.g. 1-c,2+c,3-c,1+c,2-c,3+c for the trefoil knot.
+<p>
+    Enter a Gauss code below, as a comma-separated list of numbers
+    followed by + for an over-crossing or - for an under-crossing,
+    e.g. 1-,2+,3-,1+,2-,3+ for the trefoil knot.
 </p>
+
+<p>
+    You may optionally include crossing orientations as 'c' for
+    positive ('clockwise') or 'a' for negative ('anticlockwise'),
+    e.g. 1-c,2+c,3-c,1+c,2-c,3+c for the trefoil knot. If you do not
+    include this information, the chirality of the knot will be
+    selected arbitrarily.
+</p>
+
 
 <div class="centred">
   <textarea name="gausscode" cols="40" rows="5" id="gausscode_box"></textarea>

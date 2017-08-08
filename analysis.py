@@ -39,12 +39,21 @@ def gauss_code_to_json(gc):
     from pyknot2.representations.representation import Representation
     if len(gc) > 5000:
         return(True, 'Gauss code too long')
-    try:
-        representation = Representation(str(gc))
-    except:
-        import traceback
-        traceback.print_exc()
-        return (True, 'Gauss code could not be parsed')
+
+    if 'c' in gc or 'a' in gc:
+        try:
+            representation = Representation(str(gc))
+        except:
+            import traceback
+            traceback.print_exc()
+            return (True, 'Gauss code could not be parsed')
+    else:
+        try:
+            representation = Representation.calculating_orientations(str(gc))
+        except:
+            import traceback
+            traceback.print_exc()
+            return (True, 'Gauss code could not be parsed')
 
     try:
         result = representation_to_json(representation)
