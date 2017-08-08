@@ -54,7 +54,7 @@ div.scroll {
     padding-right: 8px;
 }
 
-#draw_container {
+#analysis_container {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
