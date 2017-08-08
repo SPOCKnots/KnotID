@@ -14,16 +14,27 @@
 {% endif %}
 {% endwith %}
 
-<p>The Knot ID analysis tools are intended to make it easy to view
-topological information about curves, whether specified as three
-dimensional space-curves, two dimensional projections, or standard
-topological notation. See the <a href="{{ url_for('about') }}">About</a> and <a href="{{ url_for('documentation') }}">Documentation</a> pages
-    for more information.</p>
+<p>The Knot ID analysis tools let you view topological information
+about curves, whether specified as three dimensional space-curves, as two
+dimensional projections, or via standard topological notation. See
+the <a href="{{ url_for('about') }}">About</a> and <a href="{{
+url_for('documentation') }}">Documentation</a> pages for more
+information.</p>
 
 <h3>Draw a knot</h3>
 
 <p>Visit the <a href="{{ url_for('draw') }}">drawing tool</a> to
     draw a knot diagram and view information about its properties.</p>
+
+<h3>Enter a Gauss code</h3>
+
+<p>Visit the <a href="{{ url_for('gausscode') }}">dedicated Gauss code page</a> to
+    upload via this standard topological notation.</p>
+
+<h3>Enter a Dowker-Thistlethwaite code</h3>
+
+<p>Visit the <a href="{{ url_for('dowker') }}">dedicated Dowker-Thistlethwaite notation page</a> to
+    upload via this standard topological notation.</p>
 
 <h3>Torus knots</h3>
 
@@ -56,16 +67,6 @@ following would describe a trefoil knot. You can also download this example <a h
 
 
 {% include 'upload_from_file.html' %}
-
-<h3>Enter a Gauss code</h3>
-
-<p>Visit the <a href="{{ url_for('gausscode') }}">dedicated Gauss code page</a> to
-    upload via this standard topological notation.</p>
-
-<h3>Enter a Dowker-Thistlethwaite code</h3>
-
-<p>Visit the <a href="{{ url_for('dowker') }}">dedicated Dowker-Thistlethwaite notation page</a> to
-    upload via this standard topological notation.</p>
 
 <h3>Upload from paste</h3>
 
