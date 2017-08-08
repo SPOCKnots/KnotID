@@ -226,7 +226,7 @@ input[type=checkbox], input[type=radio] {
   /* float: right; */
 }
 
-#draw_form {
+#form_container {
     text-align: center;
     padding: 10px;
 }
