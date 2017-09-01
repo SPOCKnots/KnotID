@@ -2,7 +2,7 @@
 import numpy as n
 import json
 from pyknotid.spacecurves import Knot
-from pyknotid.make.torus import knot as torus_knot
+from pyknotid.make.torus import torus_knot
 
 from cache import CachedGaussCode, db
 
@@ -230,7 +230,9 @@ def cache_from_analysis(analysis):
 
 def torus_knot_to_json(p, q):
     
-    return knot_to_json(Knot(torus_knot(p, q, 300)*10, verbose=False))
+    k = torus_knot(p, q, 300)
+    k.points *= 10
+    return knot_to_json(k)
 
 def identifier_to_latex(i):
     if '_' in i:
