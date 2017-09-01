@@ -1,8 +1,8 @@
 
 import numpy as n
 import json
-from pyknot2.spacecurves import Knot
-from pyknot2.make.torus import knot as torus_knot
+from pyknotid.spacecurves import Knot
+from pyknotid.make.torus import knot as torus_knot
 
 from cache import CachedGaussCode, db
 
@@ -36,7 +36,7 @@ def knot_to_json(k):
 
 
 def gauss_code_to_json(gc):
-    from pyknot2.representations.representation import Representation
+    from pyknotid.representations.representation import Representation
     if len(gc) > 5000:
         return(True, 'Gauss code too long')
 
@@ -65,7 +65,7 @@ def gauss_code_to_json(gc):
     return (False, result)
 
 def dt_code_to_json(dt):
-    from pyknot2.representations.dtnotation import DTNotation
+    from pyknotid.representations.dtnotation import DTNotation
     if len(dt) > 2000:
         return(True, 'DT code too long')
     try:
@@ -129,7 +129,7 @@ def representation_to_json(rep):
                              
 
 
-    from pyknot2.catalogue.database import Knot
+    from pyknotid.catalogue.database import Knot
     cached = cached_from_gauss_code(simplified_gc_string)
     if cached is not None:
         return analysis_from_cache(cached, gc_string, gc_length)
