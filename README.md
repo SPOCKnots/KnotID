@@ -9,6 +9,12 @@ Knot ID is developed as part of the [Scientific Properties of Complex Knots (SPO
 
 ![Screenshot of the Knot ID drawing tool](knotid_screenshot_draw.png)
 
+## Run Knot ID
+
+To run Knot ID locally, install [pyknotid](https://github.com/SPOCKnots/pyknotid), clone this repository, and run:
+
+    $ python main.py
+
 ## Technical details
 
 Knot ID is written in Python using the Flask framework. Topological
